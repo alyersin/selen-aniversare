@@ -1,41 +1,17 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 
-const scoresFilePath = path.join(process.cwd(), "data", "scores.json");
+// In-memory storage for scores (works on Vercel)
+let scores = [];
 
-// Ensure data directory exists
-const ensureDataDir = () => {
-  const dataDir = path.join(process.cwd(), "data");
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-};
-
-// Load scores from file
+// Load scores from memory
 const loadScores = () => {
-  try {
-    ensureDataDir();
-    if (fs.existsSync(scoresFilePath)) {
-      const data = fs.readFileSync(scoresFilePath, "utf8");
-      return JSON.parse(data);
-    }
-  } catch (error) {
-    console.error("Error loading scores:", error);
-  }
-  return [];
+  return scores;
 };
 
-// Save scores to file
-const saveScores = (scores) => {
-  try {
-    ensureDataDir();
-    fs.writeFileSync(scoresFilePath, JSON.stringify(scores, null, 2));
-    return true;
-  } catch (error) {
-    console.error("Error saving scores:", error);
-    return false;
-  }
+// Save scores to memory
+const saveScores = (newScores) => {
+  scores = newScores;
+  return true;
 };
 
 // GET - Retrieve all scores
