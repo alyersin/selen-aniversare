@@ -316,322 +316,306 @@ function BalloonGameContent() {
     totalBalloons,
     playerName,
     balloonMovementInterval,
-    getInsanityCriticism,
   ]);
 
   // All criticism messages organized by time thresholds
-  const criticismMessages = useMemo(
-    () => ({
-      slow30: [
-        {
-          title: "🐌 Prea lent pentru INSANITY!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🐌 Viteza melcului nu e suficientă!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🐌 Ai viteza unui melc cu rucsac!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🐌 Mă mișc mai repede decât tine!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🐌 Ai nevoie de un scutec pentru viteza ta! 😅",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🦥 Ai viteza unui leneș! 😴",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🦥 Mă plictisesc așteptând după tine!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🦥 Ai nevoie de cafea pentru viteza ta!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🦥 Leneșii se mișcă mai repede!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-
-        {
-          title: "⚡ Ai nevoie de un boost de viteză!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un motor mai puternic!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un turbo!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un rocket boost!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-
-        {
-          title: "🔥 Ai nevoie de mai multă energie!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🎯 Ai nevoie de mai multă precizie!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-
-        {
-          title: "🎯 Ai nevoie de mai multă concentrare!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-
-        {
-          title: "🏆 Încă nu ești un supererou!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai mult antrenament!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🏆 Nu ești suficient de rapid!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai multă practică!",
-          message: "30 de secunde maxim pentru a termina nivelul!",
-          action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-        },
-      ],
-      slow20: [
-        {
-          title: "🐔 Treci înapoi la nivelul găinilor!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🐔 Ești mai lent decât o găină cu ochelari!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐔 Găinile se mișcă mai repede decât tine!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐔 Ai nevoie de antrenament cu găinile!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "⚡ Ai nevoie de un boost de viteză!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un motor mai puternic!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un turbo!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un rocket boost!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🔥 Ai nevoie de mai multă energie!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🎯 Ai nevoie de mai multă precizie!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🎯 Ai nevoie de mai multă concentrare!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🏆 Nu ești suficient de bun!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai mult antrenament!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Nu ești suficient de rapid!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai multă practică!",
-          message:
-            "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-      ],
-      slow10: [
-        {
-          title: "🐢 Prea lent pentru INSANITY!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐢 Viteza țestoasei nu e suficientă!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐢 Ai nevoie de un motor pentru viteza ta!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐢 Țestoasele se mișcă mai repede!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🐢 Ai viteza unui melc cu rucsac!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "⚡ Ai nevoie de un boost de viteză!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un motor mai puternic!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un turbo!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "⚡ Ai nevoie de un rocket boost!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🔥 Ai nevoie de mai multă energie!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🎯 Ai nevoie de mai multă precizie!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🎯 Ai nevoie de mai multă concentrare!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-
-        {
-          title: "🏆 Nu ești suficient de bun!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai mult antrenament!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Nu ești suficient de rapid!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-        {
-          title: "🏆 Ai nevoie de mai multă practică!",
-          message:
-            "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-          action: "Încearcă din nou sau revino la modul normal! 🎮",
-        },
-      ],
-    }),
-    []
-  );
+  const criticismMessages = {
+    slow30: [
+      {
+        title: "🐌 Prea lent pentru INSANITY!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🐌 Viteza melcului nu e suficientă!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🐌 Ai viteza unui melc cu rucsac!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🐌 Mă mișc mai repede decât tine!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🐌 Ai nevoie de un scutec pentru viteza ta! 😅",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🦥 Ai viteza unui leneș! 😴",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🦥 Mă plictisesc așteptând după tine!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🦥 Ai nevoie de cafea pentru viteza ta!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🦥 Leneșii se mișcă mai repede!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un boost de viteză!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un motor mai puternic!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un turbo!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un rocket boost!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🔥 Ai nevoie de mai multă energie!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă precizie!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă concentrare!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🏆 Încă nu ești un supererou!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai mult antrenament!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🏆 Nu ești suficient de rapid!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai multă practică!",
+        message: "30 de secunde maxim pentru a termina nivelul!",
+        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
+      },
+    ],
+    slow20: [
+      {
+        title: "🐔 Treci înapoi la nivelul găinilor!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐔 Ești mai lent decât o găină cu ochelari!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐔 Găinile se mișcă mai repede decât tine!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐔 Ai nevoie de antrenament cu găinile!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un boost de viteză!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un motor mai puternic!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un turbo!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un rocket boost!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🔥 Ai nevoie de mai multă energie!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă precizie!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă concentrare!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Nu ești suficient de bun!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai mult antrenament!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Nu ești suficient de rapid!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai multă practică!",
+        message:
+          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+    ],
+    slow10: [
+      {
+        title: "🐢 Prea lent pentru INSANITY!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐢 Viteza țestoasei nu e suficientă!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐢 Ai nevoie de un motor pentru viteza ta!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐢 Țestoasele se mișcă mai repede!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐢 Ai viteza unui melc cu rucsac!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un boost de viteză!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un motor mai puternic!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un turbo!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ Ai nevoie de un rocket boost!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🔥 Ai nevoie de mai multă energie!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă precizie!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🎯 Ai nevoie de mai multă concentrare!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Nu ești suficient de bun!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai mult antrenament!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Nu ești suficient de rapid!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🏆 Ai nevoie de mai multă practică!",
+        message:
+          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+    ],
+  };
 
   // Check different time thresholds for insanity mode criticism
-  const getInsanityCriticism = useCallback(() => {
+  const getInsanityCriticism = () => {
     if (!isInsanityMode) return null;
 
     let messages;
@@ -650,7 +634,7 @@ function BalloonGameContent() {
       messages[Math.floor(Math.random() * messages.length)];
 
     return selectedMessage;
-  }, [isInsanityMode, gameTime, criticismMessages]);
+  };
 
   // Check if player won insanity mode (under 10 seconds)
   const isInsanityWinner = () => {
