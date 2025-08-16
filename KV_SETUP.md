@@ -78,3 +78,66 @@ După configurarea KV:
 - ✅ **Va funcționa** imediat după deploy
 
 **Pentru scoruri permanente, configurează KV database-ul!**
+
+## 🔍 Verificare Date din KV Database
+
+### 1. Debug API Endpoint
+
+După deploy, poți verifica datele accesând:
+
+```
+https://your-app.vercel.app/api/debug
+```
+
+Acest endpoint va afișa:
+
+- ✅ Dacă KV este configurat
+- ✅ Numărul de scoruri
+- ✅ Toate scorurile salvate
+- ✅ Timestamp-ul ultimei verificări
+
+### 2. Pe Vercel Dashboard
+
+- Mergi la proiectul tău
+- Tab "Storage" → Click pe database-ul Redis
+- Secțiunea "Data" sau "Browse" (dacă este disponibilă)
+
+### 3. Folosind Redis CLI
+
+- Click pe butonul "Open in Redis" din Vercel Dashboard
+- Folosește comanda: `GET game_scores`
+
+### 4. Verificare în Browser
+
+1. **Deschide aplicația** pe Vercel
+2. **Joacă un joc** și salvează un scor
+3. **Accesează** `/api/debug` pentru a vedea datele
+4. **Verifică ranking-ul** în aplicație
+
+## 📊 Exemple de Răspuns Debug
+
+**Dacă KV funcționează:**
+
+```json
+{
+  "timestamp": "2025-01-16T12:34:56.789Z",
+  "kvConfigured": true,
+  "scoresCount": 3,
+  "scores": [
+    { "player": "Berna", "time": 10403, "date": "8/16/2025" },
+    { "player": "Alex", "time": 12000, "date": "8/16/2025" }
+  ],
+  "message": "Scoruri găsite în KV"
+}
+```
+
+**Dacă KV nu este configurat:**
+
+```json
+{
+  "timestamp": "2025-01-16T12:34:56.789Z",
+  "kvConfigured": false,
+  "error": "KV connection failed",
+  "message": "KV nu este configurat corect"
+}
+```

@@ -95,6 +95,15 @@ export default function RankingModal({ showRanking, closeRanking }) {
                 )}
               </div>
 
+              <div className={styles.insanityInfo}>
+                <h4>🔥 Nivelul INSANITY:</h4>
+                <p>
+                  Jucătorii care se află pe primele 3 locuri vor avea acces la
+                  nivelul INSANITY!
+                </p>
+                <p>Un nivel extrem de dificil pentru adevărații campioni!</p>
+              </div>
+
               <div className={styles.gameInstructions}>
                 <h4>🎮 Cum să joci:</h4>
                 <p>1. Sparge toate baloanele roșii de pe pagina principală</p>
