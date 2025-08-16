@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Comic+Sans+MS:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&family=Fredoka+One:wght@400&family=Sniglet:wght@400;800&display=swap");
 
 /* CSS Variables for DRY principle */
 :root {
@@ -46,8 +46,8 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
-    sans-serif;
+  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
+    "Chalkboard SE", cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;

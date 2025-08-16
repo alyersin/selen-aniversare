@@ -7,8 +7,8 @@
   background: var(--gradient-primary);
   color: var(--color-white);
   font-size: 1.5rem;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .loading p {
@@ -21,8 +21,8 @@
   background: var(--gradient-primary);
   position: relative;
   overflow-x: hidden;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 /* Animated background */
@@ -825,7 +825,7 @@
 
 /* Birthday message */
 .message {
-  margin: 40px 20px;
+  margin: 40px 0;
   background: rgba(255, 255, 255, 0.9);
   padding: 30px;
   border-radius: 20px;
@@ -1003,7 +1003,7 @@
 
 /* Fun facts about being 5 */
 .funFacts {
-  margin: 40px 20px;
+  margin: 40px 0;
   animation: fadeInUp 1s ease-out 2s both;
   position: relative;
   z-index: 101;
@@ -1078,7 +1078,7 @@
 
 /* Contact Information */
 .contactInfo {
-  margin: 40px 20px;
+  margin: 40px 0;
   animation: fadeInUp 1s ease-out 1.5s both;
   position: relative;
   z-index: 101;
@@ -1588,7 +1588,7 @@
   }
 
   .contactInfo {
-    margin: 60px 20px;
+    margin: 60px 0;
   }
 
   .contactInfo h3 {
@@ -2302,8 +2302,8 @@
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff3838 100%);
   padding: 20px;
   animation: countdownPulse 1s ease-in-out infinite;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .countdownContent {
@@ -2376,8 +2376,8 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .gameStartContent {
@@ -2434,8 +2434,8 @@
   cursor: pointer;
   margin: 10px;
   transition: all 0.3s ease;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .startGameBtn {
@@ -2462,8 +2462,8 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .gameHeader {
@@ -2937,8 +2937,8 @@
   min-height: 100vh;
   background: var(--gradient-primary);
   padding: 20px;
-  font-family: "Comic Neue", "Fredoka One", "Sniglet", "Comic Sans MS",
-    "Chalkboard SE", cursive, sans-serif;
+  font-family: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive,
+    sans-serif;
 }
 
 .rankingPageContent {
