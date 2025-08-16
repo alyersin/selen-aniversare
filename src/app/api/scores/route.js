@@ -1,27 +1,34 @@
 import { NextResponse } from "next/server";
-import { kv } from "@vercel/kv";
 
-const SCORES_KEY = "game_scores";
+// Fallback to in-memory storage if KV is not configured
+let scores = [];
 
-// Load scores from KV storage
+// Try to use KV storage, fallback to memory
 const loadScores = async () => {
   try {
-    const scores = await kv.get(SCORES_KEY);
-    return scores || [];
+    // Try to import KV dynamically
+    const { kv } = await import("@vercel/kv");
+    const SCORES_KEY = "game_scores";
+    const kvScores = await kv.get(SCORES_KEY);
+    return kvScores || [];
   } catch (error) {
-    console.error("Error loading scores from KV:", error);
-    return [];
+    console.log("KV not configured, using in-memory storage:", error.message);
+    return scores;
   }
 };
 
-// Save scores to KV storage
+// Try to save to KV storage, fallback to memory
 const saveScores = async (newScores) => {
   try {
+    // Try to import KV dynamically
+    const { kv } = await import("@vercel/kv");
+    const SCORES_KEY = "game_scores";
     await kv.set(SCORES_KEY, newScores);
     return true;
   } catch (error) {
-    console.error("Error saving scores to KV:", error);
-    return false;
+    console.log("KV not configured, using in-memory storage:", error.message);
+    scores = newScores;
+    return true;
   }
 };
 

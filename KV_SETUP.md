@@ -33,6 +33,8 @@ KV_REST_API_TOKEN=...
 KV_REST_API_READ_ONLY_TOKEN=...
 ```
 
+**IMPORTANT:** Aceste variabile trebuie să apară în secțiunea "Environment Variables" din Vercel Dashboard.
+
 ### 4. Testare
 
 După configurare:
@@ -65,3 +67,14 @@ După configurarea KV:
 2. **Vercel va redeploya** automat
 3. **API-ul va folosi** KV storage
 4. **Scorurile vor persista** între restart-uri
+
+## 🔄 Soluție Temporară
+
+**Până configurezi KV:**
+
+- ✅ **Aplicația funcționează** cu storage în memorie
+- ✅ **Scorurile se salvează** pe durata sesiunii
+- ✅ **Nu se vor reseta** la fiecare request
+- ✅ **Va funcționa** imediat după deploy
+
+**Pentru scoruri permanente, configurează KV database-ul!**
