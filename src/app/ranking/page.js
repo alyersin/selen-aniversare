@@ -100,8 +100,10 @@ export default function FullRankingPage() {
             <div className={styles.rankingPageInstructions}>
               <h3>🎮 Cum să joci:</h3>
               <p>1. Sparge toate baloanele roșii de pe pagina principală</p>
-              <p>2. Apasă "Da, vreau să joc!" în modalul care apare</p>
-              <p>3. Introdu numele tău și apasă "Începe jocul!"</p>
+              <p>
+                2. Apasă &quot;Da, vreau să joc!&quot; în modalul care apare
+              </p>
+              <p>3. Introdu numele tău și apasă &quot;Începe jocul!&quot;</p>
               <p>4. Sparge baloanele cât mai repede posibil!</p>
               <p>5. Scorul tău va apărea aici în ranking</p>
             </div>

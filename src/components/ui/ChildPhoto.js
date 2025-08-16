@@ -1,4 +1,5 @@
 import styles from "../../styles/main.module.css";
+import Image from "next/image";
 
 export default function ChildPhoto() {
   return (
@@ -6,9 +7,11 @@ export default function ChildPhoto() {
       {/* Desktop version - fixed in top left corner */}
       <div className={styles.childPhotoContainerDesktop}>
         <div className={styles.childPhotoWrapper}>
-          <img
+          <Image
             src="/photo/selen.jpg"
             alt="Selen - 5 ani"
+            width={150}
+            height={150}
             className={styles.childPhoto}
             onError={(e) => {
               e.target.style.display = "none";
@@ -28,9 +31,11 @@ export default function ChildPhoto() {
       {/* Mobile version - centered above title */}
       <div className={styles.childPhotoContainerMobile}>
         <div className={styles.childPhotoWrapper}>
-          <img
+          <Image
             src="/photo/selen.jpg"
             alt="Selen - 5 ani"
+            width={150}
+            height={150}
             className={styles.childPhoto}
             onError={(e) => {
               e.target.style.display = "none";

@@ -133,7 +133,13 @@ export default function BalloonGame() {
         clearInterval(balloonMovementInterval);
       }
     };
-  }, [gameStarted, gameFinished, isInsanityMode]);
+  }, [
+    gameStarted,
+    gameFinished,
+    isInsanityMode,
+    balloonMovementInterval,
+    finishGame,
+  ]);
 
   const getRandomBalloonColor = () => {
     const colors = ["🎈", "🎈", "🎈", "🎈", "🎈"];

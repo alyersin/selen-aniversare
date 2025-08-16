@@ -98,8 +98,10 @@ export default function RankingModal({ showRanking, closeRanking }) {
               <div className={styles.gameInstructions}>
                 <h4>🎮 Cum să joci:</h4>
                 <p>1. Sparge toate baloanele roșii de pe pagina principală</p>
-                <p>2. Apasă "Da, vreau să joc!" în modalul care apare</p>
-                <p>3. Introdu numele tău și apasă "Începe jocul!"</p>
+                <p>
+                  2. Apasă &quot;Da, vreau să joc!&quot; în modalul care apare
+                </p>
+                <p>3. Introdu numele tău și apasă &quot;Începe jocul!&quot;</p>
                 <p>4. Sparge baloanele cât mai repede posibil!</p>
                 <p>5. Scorul tău va apărea aici în ranking</p>
               </div>
