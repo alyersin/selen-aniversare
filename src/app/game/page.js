@@ -23,6 +23,7 @@ export default function BalloonGame() {
   const [countdown, setCountdown] = useState(null);
   const [criticismIndex, setCriticismIndex] = useState(0);
   const [selectedCriticism, setSelectedCriticism] = useState(null);
+  const [timeLimitMessage, setTimeLimitMessage] = useState(null);
 
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
@@ -215,17 +216,52 @@ export default function BalloonGame() {
     setGameFinished(true);
     const endTime = Date.now();
     const gameDuration = endTime - startTimeRef.current;
-    setGameTime(gameDuration);
 
-    // If game was auto-finished due to time limit, set the time to 30 seconds
-    if (isInsanityMode && time >= 30000) {
+    // Check if this was a time limit finish
+    const wasTimeLimit = isInsanityMode && time >= 30000;
+
+    // Set the final game time
+    if (wasTimeLimit) {
       setGameTime(30000);
+    } else {
+      setGameTime(gameDuration);
     }
 
     // Select and save one criticism message for insanity mode
     if (isInsanityMode) {
-      const criticism = getInsanityCriticism();
-      setSelectedCriticism(criticism);
+      const finalGameTime = wasTimeLimit ? 30000 : gameDuration;
+      const isWinner =
+        isInsanityMode &&
+        finalGameTime < 10000 &&
+        poppedCount === totalBalloons;
+      const isCompleted =
+        isInsanityMode &&
+        finalGameTime >= 10000 &&
+        finalGameTime < 30000 &&
+        poppedCount === totalBalloons;
+
+      console.log("Game finish debug:", {
+        wasTimeLimit,
+        finalGameTime,
+        poppedCount,
+        totalBalloons,
+        isWinner,
+        isCompleted,
+      });
+
+      if (!isWinner && !isCompleted) {
+        if (wasTimeLimit) {
+          // Time limit exceeded
+          const timeLimitMsg = getTimeLimitMessage();
+          setTimeLimitMessage(timeLimitMsg);
+          console.log("Setting time limit message:", timeLimitMsg);
+        } else {
+          // Manual finish with criticism
+          const criticism = getInsanityCriticism();
+          setSelectedCriticism(criticism);
+          console.log("Setting criticism message:", criticism);
+        }
+      }
     }
 
     // Save score to server (only for normal mode, not insanity mode)
@@ -286,12 +322,12 @@ export default function BalloonGame() {
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
       {
-        title: "🐌 Ai nevoie de un scutec pentru viteza ta!",
+        title: "🐌 Ai nevoie de un scutec pentru viteza ta! 😅",
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
       {
-        title: "🦥 Ai viteza unui leneș!",
+        title: "🦥 Ai viteza unui leneș! 😴",
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
@@ -310,26 +346,7 @@ export default function BalloonGame() {
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
-      {
-        title: "🎮 Ai nevoie de un controller mai bun!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🎮 Ai lag în realitate!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un upgrade la mouse!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un gaming chair!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
+
       {
         title: "⚡ Ai nevoie de un boost de viteză!",
         message: "30 de secunde maxim pentru a termina nivelul!",
@@ -350,21 +367,7 @@ export default function BalloonGame() {
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
-      {
-        title: "🔥 Nu ești suficient de nebun!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🔥 Ai nevoie de mai multă nebunie!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🔥 Nu ești suficient de INSANE!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
+
       {
         title: "🔥 Ai nevoie de mai multă energie!",
         message: "30 de secunde maxim pentru a termina nivelul!",
@@ -375,23 +378,15 @@ export default function BalloonGame() {
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
-      {
-        title: "🎯 Ai nevoie de un upgrade la ochi!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
+
       {
         title: "🎯 Ai nevoie de mai multă concentrare!",
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
+
       {
-        title: "🎯 Ai nevoie de un upgrade la reflexe!",
-        message: "30 de secunde maxim pentru a termina nivelul!",
-        action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
-      },
-      {
-        title: "🏆 Nu ești suficient de bun!",
+        title: "🏆 Încă nu ești un supererou!",
         message: "30 de secunde maxim pentru a termina nivelul!",
         action: "Jocul s-a oprit automat! Încearcă din nou! 🎮",
       },
@@ -418,12 +413,7 @@ export default function BalloonGame() {
           "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🐔 Nu ai ce cauta aici!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "🐔 Ești mai lent decât o găină cu ochelari!",
         message:
@@ -442,30 +432,7 @@ export default function BalloonGame() {
           "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🎮 Ai nevoie de un controller mai bun!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai lag în realitate!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un upgrade la mouse!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un gaming chair!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "⚡ Ai nevoie de un boost de viteză!",
         message:
@@ -492,24 +459,6 @@ export default function BalloonGame() {
       },
 
       {
-        title: "🔥 Nu ești suficient de nebun!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🔥 Ai nevoie de mai multă nebunie!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🔥 Nu ești suficient de INSANE!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
         title: "🔥 Ai nevoie de mai multă energie!",
         message:
           "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
@@ -521,24 +470,14 @@ export default function BalloonGame() {
           "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🎯 Ai nevoie de un upgrade la ochi!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "🎯 Ai nevoie de mai multă concentrare!",
         message:
           "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🎯 Ai nevoie de un upgrade la reflexe!",
-        message:
-          "20 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "🏆 Nu ești suficient de bun!",
         message:
@@ -595,30 +534,7 @@ export default function BalloonGame() {
           "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🎮 Ai nevoie de un controller mai bun!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai lag în realitate!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un upgrade la mouse!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🎮 Ai nevoie de un gaming chair!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "⚡ Ai nevoie de un boost de viteză!",
         message:
@@ -645,24 +561,6 @@ export default function BalloonGame() {
       },
 
       {
-        title: "🔥 Nu ești suficient de nebun!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🔥 Ai nevoie de mai multă nebunie!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
-        title: "🔥 Nu ești suficient de INSANE!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
         title: "🔥 Ai nevoie de mai multă energie!",
         message:
           "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
@@ -675,23 +573,12 @@ export default function BalloonGame() {
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
       {
-        title: "🎯 Ai nevoie de un upgrade la ochi!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
-      {
         title: "🎯 Ai nevoie de mai multă concentrare!",
         message:
           "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
         action: "Încearcă din nou sau revino la modul normal! 🎮",
       },
-      {
-        title: "🎯 Ai nevoie de un upgrade la reflexe!",
-        message:
-          "10 de secunde sau mai puțin pentru a fi considerat un jucător adevărat!",
-        action: "Încearcă din nou sau revino la modul normal! 🎮",
-      },
+
       {
         title: "🏆 Nu ești suficient de bun!",
         message:
@@ -741,6 +628,57 @@ export default function BalloonGame() {
     return selectedMessage;
   };
 
+  // Check if player won insanity mode (under 10 seconds)
+  const isInsanityWinner = () => {
+    return isInsanityMode && gameTime < 10000 && poppedCount === totalBalloons;
+  };
+
+  // Check if player completed insanity mode (10-30 seconds)
+  const isInsanityCompleted = () => {
+    return (
+      isInsanityMode &&
+      gameTime >= 10000 &&
+      gameTime < 30000 &&
+      poppedCount === totalBalloons
+    );
+  };
+
+  // Time limit messages for when player doesn't finish in 30 seconds
+  const getTimeLimitMessage = () => {
+    const timeLimitMessages = [
+      {
+        title: "⏰ TIMP EXPIRAT!",
+        message: "Trebuie să spargi toate baloanele în 30 de secunde!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐌 PREA LENT!",
+        message: "30 de secunde nu sunt suficiente pentru tine!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🦥 LENEȘUL!",
+        message: "Ai fost prea lent pentru nivelul INSANITY!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "🐔 Oops! Prea greu!",
+        message:
+          "Nivelul INSANITY e pentru supererou! Tu ești încă un începător! 😅",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+      {
+        title: "⚡ PREA ÎNCET!",
+        message: "Viteza ta nu e suficientă pentru INSANITY!",
+        action: "Încearcă din nou sau revino la modul normal! 🎮",
+      },
+    ];
+
+    return timeLimitMessages[
+      Math.floor(Math.random() * timeLimitMessages.length)
+    ];
+  };
+
   const formatTime = (ms) => {
     const seconds = Math.floor(ms / 1000);
     const milliseconds = Math.floor((ms % 1000) / 10);
@@ -759,6 +697,7 @@ export default function BalloonGame() {
     setPoppedCount(0);
     setBalloons([]);
     setSelectedCriticism(null); // Reset selected criticism
+    setTimeLimitMessage(null); // Reset time limit message
     // Increment criticism index for next attempt
     setCriticismIndex((prev) => prev + 1);
   };
@@ -878,20 +817,58 @@ export default function BalloonGame() {
         <div className={styles.gameFinishedModal}>
           <div className={styles.gameFinishedContent}>
             {isInsanityMode ? (
-              selectedCriticism ? (
+              timeLimitMessage ? (
+                <>
+                  <h2>{timeLimitMessage.title}</h2>
+                  <p>
+                    <strong>{playerName}</strong>, ai spart doar{" "}
+                    <strong>
+                      {poppedCount}/{totalBalloons}
+                    </strong>{" "}
+                    baloane în <strong>{formatTime(gameTime)}</strong>!
+                  </p>
+                  <div className={styles.chickenMessage}>
+                    <h3>{timeLimitMessage.title}</h3>
+                    <p>{timeLimitMessage.message}</p>
+                    <p>{timeLimitMessage.action}</p>
+                  </div>
+                </>
+              ) : selectedCriticism ? (
                 <>
                   <h2>{selectedCriticism.title}</h2>
                   <p>
-                    <strong>{playerName}</strong>, ai terminat în{" "}
-                    <strong>{formatTime(gameTime)}</strong>!
+                    <strong>{playerName}</strong>, ai spart doar{" "}
+                    <strong>
+                      {poppedCount}/{totalBalloons}
+                    </strong>{" "}
+                    baloane în <strong>{formatTime(gameTime)}</strong>!
                   </p>
                   <div className={styles.chickenMessage}>
-                    <h3>🐔 Nu ai ce cauta aici!</h3>
+                    <h3>😅 Oops! Prea greu pentru tine!</h3>
                     <p>{selectedCriticism.message}</p>
                     <p>{selectedCriticism.action}</p>
                   </div>
                 </>
-              ) : (
+              ) : gameTime < 10000 && poppedCount === totalBalloons ? (
+                <>
+                  <h2>🏆 INSANITY CÂȘTIGAT!</h2>
+                  <p>
+                    Felicitări, <strong>{playerName}</strong>! Ai terminat
+                    nivelul INSANITY în <strong>{formatTime(gameTime)}</strong>!
+                  </p>
+                  <div className={styles.insanityAchievement}>
+                    <h3>🥇 LEGENDĂ ABSOLUTĂ!</h3>
+                    <p>
+                      Ai terminat sub 10 secunde! Ești un jucător LEGENDAR! 🔥
+                    </p>
+                    <div style={{ fontSize: "3rem", margin: "20px 0" }}>
+                      🏆👑💎
+                    </div>
+                  </div>
+                </>
+              ) : gameTime >= 10000 &&
+                gameTime < 30000 &&
+                poppedCount === totalBalloons ? (
                 <>
                   <h2>🔥 INSANITY COMPLETAT!</h2>
                   <p>
@@ -901,6 +878,22 @@ export default function BalloonGame() {
                   <div className={styles.insanityAchievement}>
                     <h3>🏆 Achievement deblocat!</h3>
                     <p>Ai dovedit că ești unul dintre cei mai buni jucători!</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h2>⏰ TIMP EXPIRAT!</h2>
+                  <p>
+                    <strong>{playerName}</strong>, ai spart doar{" "}
+                    <strong>
+                      {poppedCount}/{totalBalloons}
+                    </strong>{" "}
+                    baloane în <strong>{formatTime(gameTime)}</strong>!
+                  </p>
+                  <div className={styles.chickenMessage}>
+                    <h3>😅 Oops! Timpul s-a scurs!</h3>
+                    <p>Trebuie să spargi toate baloanele în 30 de secunde!</p>
+                    <p>Încearcă din nou sau revino la modul normal! 🎮</p>
                   </div>
                 </>
               )

@@ -1,8 +1,10 @@
 import styles from "../../styles/main.module.css";
+import ChildPhoto from "../ui/ChildPhoto";
 
 export default function Header() {
   return (
     <header className={styles.header}>
+      <ChildPhoto />
       <h1 className={styles.title}>
         <span className={styles.rainbow}>🎉</span>
         <span className={styles.name}>Selen</span>

@@ -17,8 +17,7 @@ export default function MapModal({
         <div className={styles.mapContent}>
           <div className={styles.locationInfo}>
             <h4>Elite Beach, Faleza Nord</h4>
-            <p>Constanța, România</p>
-            <p>Pe malul mării, cu vedere panoramică</p>
+            <p>Constanța</p>
           </div>
           <div className={styles.mapButtons}>
             <button className={styles.mapButton} onClick={openGoogleMaps}>

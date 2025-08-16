@@ -20,6 +20,7 @@ import MusicPlayer from "../components/layout/MusicPlayer";
 import Confetti from "../components/game/Confetti";
 import MagicEffects from "../components/game/MagicEffects";
 import ContactInfo from "../components/ui/ContactInfo";
+import ChildPhoto from "../components/ui/ChildPhoto";
 
 export default function Home() {
   const [showCake, setShowCake] = useState(false);

@@ -9,6 +9,8 @@ export default function AnimatedBackground() {
       <div className={styles.stars}></div>
       <div className={styles.stars}></div>
       <div className={styles.stars}></div>
+      <div className={styles.stars}></div>
+      <div className={styles.stars}></div>
     </div>
   );
 }

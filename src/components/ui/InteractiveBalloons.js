@@ -67,7 +67,8 @@ export default function InteractiveBalloons({
       </div>
       {balloonPopCount > 0 && (
         <div className={styles.popCount}>
-          Ai spart {balloonPopCount} balon{balloonPopCount !== 1 ? "e" : ""}! 🎊
+          Ai spart {balloonPopCount} baloan{balloonPopCount !== 1 ? "e" : ""}!
+          🎊
         </div>
       )}
     </div>
