@@ -1,23 +1,34 @@
 import { NextResponse } from "next/server";
+import { kv } from "@vercel/kv";
 
-// In-memory storage for scores (works on Vercel)
-let scores = [];
+const SCORES_KEY = "game_scores";
 
-// Load scores from memory
-const loadScores = () => {
-  return scores;
+// Load scores from KV storage
+const loadScores = async () => {
+  try {
+    const scores = await kv.get(SCORES_KEY);
+    return scores || [];
+  } catch (error) {
+    console.error("Error loading scores from KV:", error);
+    return [];
+  }
 };
 
-// Save scores to memory
-const saveScores = (newScores) => {
-  scores = newScores;
-  return true;
+// Save scores to KV storage
+const saveScores = async (newScores) => {
+  try {
+    await kv.set(SCORES_KEY, newScores);
+    return true;
+  } catch (error) {
+    console.error("Error saving scores to KV:", error);
+    return false;
+  }
 };
 
 // GET - Retrieve all scores
 export async function GET() {
   try {
-    const scores = loadScores();
+    const scores = await loadScores();
     return NextResponse.json({ scores });
   } catch (error) {
     return NextResponse.json(
@@ -40,7 +51,7 @@ export async function POST(request) {
       );
     }
 
-    const scores = loadScores();
+    const scores = await loadScores();
 
     // Check if player already exists
     const existingPlayerIndex = scores.findIndex(
@@ -65,8 +76,8 @@ export async function POST(request) {
     scores.sort((a, b) => a.time - b.time);
     const topScores = scores.slice(0, 10);
 
-    // Save back to file
-    const success = saveScores(topScores);
+    // Save back to KV storage
+    const success = await saveScores(topScores);
 
     if (success) {
       return NextResponse.json({
@@ -95,7 +106,7 @@ export async function POST(request) {
 // DELETE - Clear all scores
 export async function DELETE() {
   try {
-    const success = saveScores([]);
+    const success = await saveScores([]);
 
     if (success) {
       return NextResponse.json({
