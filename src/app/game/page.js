@@ -24,6 +24,7 @@ function BalloonGameContent() {
   const [criticismIndex, setCriticismIndex] = useState(0);
   const [selectedCriticism, setSelectedCriticism] = useState(null);
   const [timeLimitMessage, setTimeLimitMessage] = useState(null);
+  const [shouldFinishGame, setShouldFinishGame] = useState(false);
 
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
@@ -95,7 +96,7 @@ function BalloonGameContent() {
       }, 10);
 
       // Balloon movement for insanity mode
-      if (isInsanityMode) {
+      if (isInsanityMode && !balloonMovementInterval) {
         const movementInterval = setInterval(() => {
           setBalloons((prev) =>
             prev.map((balloon) => {
@@ -137,15 +138,18 @@ function BalloonGameContent() {
       }
       if (balloonMovementInterval) {
         clearInterval(balloonMovementInterval);
+        setBalloonMovementInterval(null);
       }
     };
-  }, [
-    gameStarted,
-    gameFinished,
-    isInsanityMode,
-    balloonMovementInterval,
-    finishGame,
-  ]);
+  }, [gameStarted, gameFinished, isInsanityMode]);
+
+  // Monitor shouldFinishGame flag
+  useEffect(() => {
+    if (shouldFinishGame) {
+      finishGame();
+      setShouldFinishGame(false);
+    }
+  }, [shouldFinishGame]);
 
   const startGame = (insanityMode = false) => {
     if (insanityMode) {
@@ -189,7 +193,7 @@ function BalloonGameContent() {
     setPoppedCount((prev) => {
       const newCount = prev + 1;
       if (newCount === totalBalloons) {
-        finishGame();
+        setShouldFinishGame(true);
       }
       return newCount;
     });
@@ -302,6 +306,7 @@ function BalloonGameContent() {
     }
     if (balloonMovementInterval) {
       clearInterval(balloonMovementInterval);
+      setBalloonMovementInterval(null);
     }
   }, [
     isInsanityMode,
@@ -310,7 +315,6 @@ function BalloonGameContent() {
     totalBalloons,
     playerName,
     balloonMovementInterval,
-    getInsanityCriticism,
   ]);
 
   // All criticism messages organized by time thresholds
