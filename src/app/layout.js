@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Ziua de naștere a Selen - Invitație",
-  description: "Invitație la ziua de naștere a Selen",
+  title: "Aniversare Selen - Invitație",
+  description: "Aniversare Selen",
 };
 
 export default function RootLayout({ children }) {

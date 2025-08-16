@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  Suspense,
-  useMemo,
-} from "react";
+import { useState, useEffect, useRef, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "../../styles/main.module.css";
 
@@ -34,6 +27,12 @@ function BalloonGameContent() {
 
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
+
+  // Helper functions
+  const getRandomBalloonColor = () => {
+    const colors = ["🎈", "🎈", "🎈", "🎈", "🎈"];
+    return colors[Math.floor(Math.random() * colors.length)];
+  };
 
   // Load high scores from API and check if player is in top 3
   useEffect(() => {
@@ -147,11 +146,6 @@ function BalloonGameContent() {
     balloonMovementInterval,
     finishGame,
   ]);
-
-  const getRandomBalloonColor = () => {
-    const colors = ["🎈", "🎈", "🎈", "🎈", "🎈"];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
 
   const startGame = (insanityMode = false) => {
     if (insanityMode) {
@@ -316,6 +310,7 @@ function BalloonGameContent() {
     totalBalloons,
     playerName,
     balloonMovementInterval,
+    getInsanityCriticism,
   ]);
 
   // All criticism messages organized by time thresholds
