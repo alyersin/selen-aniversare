@@ -126,7 +126,7 @@ function BalloonGameContent() {
               };
             })
           );
-        }, 50); // Update every 50ms for smooth movement
+        }, isInsanityMode ? 1000 : 2000); // Extremely slow updates for maximum stability
 
         setBalloonMovementInterval(movementInterval);
       }
@@ -785,49 +785,53 @@ function BalloonGameContent() {
   }
 
   return (
-    <div className={styles.gamePageContainer}>
-      {/* Game Header - Completely separate and isolated */}
-      <header className={styles.gameHeaderFixed}>
-        <div className={styles.gameStats}>
-          <div className={styles.gameStatItem}>
-            <span>⏱️ Timp: {formatTime(time)}</span>
-          </div>
-          <div className={styles.gameStatItem}>
-            <span>
-              💥 Sparte: {poppedCount}/{totalBalloons}
-            </span>
-          </div>
-          <div className={styles.gameStatItem}>
-            <span>👤 {playerName}</span>
-          </div>
-          {isInsanityMode && (
+    <>
+      {/* Game Header - Completely isolated from game logic */}
+      <div className={styles.gameHeaderWrapper}>
+        <header className={styles.gameHeaderFixed}>
+          <div className={styles.gameStats}>
             <div className={styles.gameStatItem}>
-              <span className={styles.insanityBadge}>🔥 INSANITY</span>
+              <span>⏱️ Timp: {formatTime(time)}</span>
             </div>
-          )}
-        </div>
-      </header>
+            <div className={styles.gameStatItem}>
+              <span>
+                💥 Sparte: {poppedCount}/{totalBalloons}
+              </span>
+            </div>
+            <div className={styles.gameStatItem}>
+              <span>👤 {playerName}</span>
+            </div>
+            {isInsanityMode && (
+              <div className={styles.gameStatItem}>
+                <span className={styles.insanityBadge}>🔥 INSANITY</span>
+              </div>
+            )}
+          </div>
+        </header>
+      </div>
 
       {/* Game Main - Completely separate */}
-      <main className={styles.gameMainContainer}>
-        <div className={styles.gameArea}>
-          {balloons.map((balloon) => (
-            <div
-              key={balloon.id}
-              className={`${styles.gameBalloon} ${
-                balloon.popped ? styles.popped : ""
-              }`}
-              style={{
-                left: balloon.x,
-                top: balloon.y,
-              }}
-              onClick={() => !balloon.popped && popBalloon(balloon.id)}
-            >
-              {balloon.popped ? "💥" : balloon.color}
-            </div>
-          ))}
-        </div>
-      </main>
+      <div className={styles.gamePageContainer}>
+        <main className={styles.gameMainContainer}>
+          <div className={styles.gameArea}>
+            {balloons.map((balloon) => (
+              <div
+                key={balloon.id}
+                className={`${styles.gameBalloon} ${
+                  balloon.popped ? styles.popped : ""
+                }`}
+                style={{
+                  left: balloon.x,
+                  top: balloon.y,
+                }}
+                onClick={() => !balloon.popped && popBalloon(balloon.id)}
+              >
+                {balloon.popped ? "💥" : balloon.color}
+              </div>
+            ))}
+          </div>
+        </main>
+      </div>
 
       {/* Game Finished Modal */}
       {gameFinished && (
@@ -957,7 +961,7 @@ function BalloonGameContent() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

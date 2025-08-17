@@ -2629,35 +2629,55 @@
   mix-blend-mode: normal;
 }
 
-.gameHeaderFixed {
+.gameHeaderWrapper {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 9999;
+  /* Completely isolate from game logic */
+  isolation: isolate;
+  contain: layout style paint;
+  transform: none !important;
+  will-change: auto;
+  animation: none !important;
+  transition: none !important;
+  /* Force stable rendering */
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+  -o-transform: none !important;
+  /* Prevent any interference */
+  pointer-events: none;
+  /* Force stable layout */
+  overflow: hidden;
+}
+
+.gameHeaderFixed {
+  position: relative;
   background: rgba(255, 255, 255, 0.9);
   padding: 15px;
   backdrop-filter: blur(10px);
-  z-index: 9999;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transform: translateZ(0);
-  will-change: transform;
+  /* Remove all transforms and animations */
+  transform: none !important;
+  will-change: auto;
   isolation: isolate;
   contain: layout style paint;
   pointer-events: none;
-  backface-visibility: hidden;
-  perspective: 1000px;
-  /* Force stable rendering */
-  transform-style: preserve-3d;
+  backface-visibility: visible;
+  perspective: none;
+  transform-style: flat;
   filter: none;
   mix-blend-mode: normal;
   /* Prevent any animation interference */
   animation: none !important;
   transition: none !important;
-  /* Force hardware acceleration */
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  -ms-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
+  /* Force stable rendering */
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+  -o-transform: none !important;
 }
 
 .gameMainContainer {
