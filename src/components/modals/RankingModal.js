@@ -87,7 +87,7 @@ export default function RankingModal({ showRanking, closeRanking }) {
                     onClick={goToFullRanking}
                     className={styles.viewAllRankingBtn}
                   >
-                    📊 Vezi toate scorurile ({highScores.length} jucători)
+                    Vezi toate scorurile ({highScores.length} jucători)
                   </button>
                 </div>
               )}
@@ -100,7 +100,6 @@ export default function RankingModal({ showRanking, closeRanking }) {
               </div>
 
               <div className={styles.insanityInfo}>
-                <h4>🔥 Nivelul INSANITY:</h4>
                 <p>
                   Jucătorii care se află pe primele 3 locuri vor avea acces la
                   nivelul INSANITY!

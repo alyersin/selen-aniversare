@@ -11,49 +11,141 @@ export default function MusicPlayer({
   showRanking,
   toggleRanking,
 }) {
-  const youtubeRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const oscillatorRef = useRef(null);
+  const gainNodeRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  // Control YouTube iframe based on music state
+  // Initialize audio context
   useEffect(() => {
-    const iframe = youtubeRef.current;
-    if (!iframe) return;
+    if (typeof window !== 'undefined') {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }, []);
 
+  // Birthday song notes (La mulți ani melody)
+  const birthdayNotes = [
+    { note: 'C4', duration: 0.5 },
+    { note: 'C4', duration: 0.5 },
+    { note: 'D4', duration: 1 },
+    { note: 'C4', duration: 1 },
+    { note: 'F4', duration: 1 },
+    { note: 'E4', duration: 2 },
+    
+    { note: 'C4', duration: 0.5 },
+    { note: 'C4', duration: 0.5 },
+    { note: 'D4', duration: 1 },
+    { note: 'C4', duration: 1 },
+    { note: 'G4', duration: 1 },
+    { note: 'F4', duration: 2 },
+    
+    { note: 'C4', duration: 0.5 },
+    { note: 'C4', duration: 0.5 },
+    { note: 'C5', duration: 1 },
+    { note: 'A4', duration: 1 },
+    { note: 'F4', duration: 1 },
+    { note: 'E4', duration: 1 },
+    { note: 'D4', duration: 2 },
+    
+    { note: 'A#4', duration: 0.5 },
+    { note: 'A#4', duration: 0.5 },
+    { note: 'A4', duration: 1 },
+    { note: 'F4', duration: 1 },
+    { note: 'G4', duration: 1 },
+    { note: 'F4', duration: 2 }
+  ];
+
+  // Convert note to frequency
+  const noteToFrequency = (note) => {
+    const notes = { 'C': 261.63, 'D': 293.66, 'E': 329.63, 'F': 349.23, 'G': 392.00, 'A': 440.00, 'A#': 466.16, 'B': 493.88 };
+    const noteName = note.slice(0, -1);
+    const octave = parseInt(note.slice(-1));
+    return notes[noteName] * Math.pow(2, octave - 4);
+  };
+
+  // Play birthday song
+  const playBirthdaySong = () => {
+    if (!audioContextRef.current || !isMusicPlaying) return;
+
+    let currentTime = audioContextRef.current.currentTime;
+    let noteIndex = 0;
+
+    const playNextNote = () => {
+      if (!isMusicPlaying || noteIndex >= birthdayNotes.length) {
+        // Restart the song
+        if (isMusicPlaying) {
+          noteIndex = 0;
+          currentTime = audioContextRef.current.currentTime;
+          playNextNote();
+        }
+        return;
+      }
+
+      const note = birthdayNotes[noteIndex];
+      const frequency = noteToFrequency(note.note);
+      
+      // Create oscillator for this note
+      const oscillator = audioContextRef.current.createOscillator();
+      const gainNode = audioContextRef.current.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContextRef.current.destination);
+      
+      oscillator.frequency.setValueAtTime(frequency, currentTime);
+      oscillator.type = 'sine';
+      
+      // Set volume envelope
+      gainNode.gain.setValueAtTime(0, currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(0.1, currentTime + note.duration - 0.05);
+      gainNode.gain.linearRampToValueAtTime(0, currentTime + note.duration);
+      
+      oscillator.start(currentTime);
+      oscillator.stop(currentTime + note.duration);
+      
+      currentTime += note.duration;
+      noteIndex++;
+      
+      // Schedule next note
+      setTimeout(playNextNote, note.duration * 1000);
+    };
+
+    playNextNote();
+  };
+
+  // Control music based on state
+  useEffect(() => {
     if (isMusicPlaying) {
-      // Start music
-      iframe.contentWindow.postMessage(
-        '{"event":"command","func":"playVideo","args":""}',
-        '*'
-      );
+      // Resume audio context if suspended
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume();
+      }
+      
+      // Start playing the birthday song
+      playBirthdaySong();
     } else {
-      // Pause music
-      iframe.contentWindow.postMessage(
-        '{"event":"command","func":"pauseVideo","args":""}',
-        '*'
-      );
+      // Stop any ongoing music
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     }
   }, [isMusicPlaying]);
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
   return (
     <>
-      {/* Hidden YouTube iframe for background music */}
-      <iframe
-        ref={youtubeRef}
-        src="https://www.youtube.com/embed/Q9N74UDE6Wc?enablejsapi=1&autoplay=0&loop=1&playlist=Q9N74UDE6Wc&controls=0&disablekb=1&fs=0&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&cc_load_policy=0"
-        width="1"
-        height="1"
-        style={{
-          position: "fixed",
-          top: "-9999px",
-          left: "-9999px",
-          opacity: 0,
-          pointerEvents: "none",
-          zIndex: -1,
-        }}
-        title="Background Music"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-
       {/* Control buttons */}
       <div className={styles.controlButtons}>
         <button className={styles.musicButton} onClick={toggleMusic}>
