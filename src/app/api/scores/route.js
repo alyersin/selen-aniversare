@@ -1,43 +1,72 @@
 import { NextResponse } from "next/server";
 
-// Fallback to in-memory storage if KV is not configured
+// Fallback to in-memory storage if Postgres is not configured
 let scores = [];
 
-// Try to use KV storage, fallback to memory
 const loadScores = async () => {
   try {
-    // Try to import KV dynamically
-    const { kv } = await import("@vercel/kv");
-    const SCORES_KEY = "game_scores";
-    const kvScores = await kv.get(SCORES_KEY);
-    return kvScores || [];
+    const { sql } = await import("@vercel/postgres");
+
+    // Create table if it doesn't exist
+    await sql`
+      CREATE TABLE IF NOT EXISTS game_scores (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) NOT NULL,
+        score INTEGER NOT NULL,
+        game_mode VARCHAR(20) NOT NULL,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+
+    // Get all scores ordered by score (best first)
+    const result = await sql`
+      SELECT username, score, game_mode, timestamp 
+      FROM game_scores 
+      ORDER BY score ASC, timestamp ASC
+    `;
+
+    return result.rows || [];
   } catch (error) {
-    console.log("KV not configured, using in-memory storage:", error.message);
-    return scores;
+    console.log(
+      "Postgres not configured, using in-memory storage:",
+      error.message
+    );
+    return scores; // Fallback
   }
 };
 
-// Try to save to KV storage, fallback to memory
 const saveScores = async (newScores) => {
   try {
-    // Try to import KV dynamically
-    const { kv } = await import("@vercel/kv");
-    const SCORES_KEY = "game_scores";
-    await kv.set(SCORES_KEY, newScores);
+    const { sql } = await import("@vercel/postgres");
+
+    // Clear existing scores
+    await sql`DELETE FROM game_scores`;
+
+    // Insert new scores
+    for (const score of newScores) {
+      await sql`
+        INSERT INTO game_scores (username, score, game_mode, timestamp)
+        VALUES (${score.username}, ${score.score}, ${score.gameMode}, ${score.timestamp})
+      `;
+    }
+
     return true;
   } catch (error) {
-    console.log("KV not configured, using in-memory storage:", error.message);
-    scores = newScores;
+    console.log(
+      "Postgres not configured, using in-memory storage:",
+      error.message
+    );
+    scores = newScores; // Fallback
     return true;
   }
 };
 
-// GET - Retrieve all scores
 export async function GET() {
   try {
     const scores = await loadScores();
-    return NextResponse.json({ scores });
+    return NextResponse.json(scores);
   } catch (error) {
+    console.error("Error loading scores:", error);
     return NextResponse.json(
       { error: "Failed to load scores" },
       { status: 500 }
@@ -45,92 +74,54 @@ export async function GET() {
   }
 }
 
-// POST - Add new score
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { player, time, date } = body;
+    const { username, score, gameMode } = await request.json();
 
-    if (!player || !time || !date) {
+    if (!username || score === undefined || !gameMode) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    const scores = await loadScores();
+    const currentScores = await loadScores();
 
-    // Check if player already exists
-    const existingPlayerIndex = scores.findIndex(
-      (score) => score.player === player
-    );
+    // Add new score
+    const newScore = {
+      username,
+      score,
+      gameMode,
+      timestamp: new Date().toISOString(),
+    };
 
-    if (existingPlayerIndex !== -1) {
-      // Player exists - update only if new score is better (lower time)
-      const existingScore = scores[existingPlayerIndex];
-      if (time < existingScore.time) {
-        // Update with better score
-        scores[existingPlayerIndex] = { player, time, date };
-      }
-      // If new score is worse, don't update
-    } else {
-      // New player - add to scores
-      const newScore = { player, time, date };
-      scores.push(newScore);
-    }
+    const updatedScores = [...currentScores, newScore];
 
-    // Sort by time (ascending) and keep top 10
-    scores.sort((a, b) => a.time - b.time);
-    const topScores = scores.slice(0, 10);
+    // Sort by score (best first) and keep only top 10
+    updatedScores.sort((a, b) => a.score - b.score);
+    const topScores = updatedScores.slice(0, 10);
 
-    // Save back to KV storage
-    const success = await saveScores(topScores);
+    await saveScores(topScores);
 
-    if (success) {
-      return NextResponse.json({
-        success: true,
-        scores: topScores,
-        message:
-          existingPlayerIndex !== -1
-            ? "Score updated successfully"
-            : "Score saved successfully",
-      });
-    } else {
-      return NextResponse.json(
-        { error: "Failed to save score" },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json({ success: true, scores: topScores });
   } catch (error) {
     console.error("Error saving score:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to save score" },
       { status: 500 }
     );
   }
 }
 
-// DELETE - Clear all scores
 export async function DELETE() {
   try {
-    const success = await saveScores([]);
-
-    if (success) {
-      return NextResponse.json({
-        success: true,
-        message: "All scores cleared successfully",
-      });
-    } else {
-      return NextResponse.json(
-        { error: "Failed to clear scores" },
-        { status: 500 }
-      );
-    }
+    const { sql } = await import("@vercel/postgres");
+    await sql`DELETE FROM game_scores`;
+    scores = []; // Clear fallback too
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error clearing scores:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    scores = []; // Clear fallback
+    return NextResponse.json({ success: true });
   }
 }

@@ -1,46 +1,49 @@
 import { NextResponse } from "next/server";
 
-// Debug endpoint pentru a verifica datele din KV
 export async function GET() {
   try {
-    console.log("🔍 Debug: Verificare KV database...");
+    // Check if Postgres is configured
+    let postgresConfigured = false;
+    let scores = [];
+    let error = null;
 
-    // Încearcă să încarci scorurile
-    const scores = await loadScores();
+    try {
+      const { sql } = await import("@vercel/postgres");
 
-    const debugInfo = {
-      timestamp: new Date().toISOString(),
-      kvConfigured: true,
-      scoresCount: scores.length,
-      scores: scores,
-      message:
-        scores.length > 0 ? "Scoruri găsite în KV" : "Nu sunt scoruri în KV",
-    };
+      // Test connection by getting scores
+      const result = await sql`
+        SELECT COUNT(*) as count FROM game_scores
+      `;
 
-    console.log("📊 Debug info:", debugInfo);
+      postgresConfigured = true;
 
-    return NextResponse.json(debugInfo);
-  } catch (error) {
-    console.error("❌ Debug error:", error);
+      // Get actual scores
+      const scoresResult = await sql`
+        SELECT username, score, game_mode, timestamp 
+        FROM game_scores 
+        ORDER BY score ASC, timestamp ASC
+      `;
+
+      scores = scoresResult.rows || [];
+    } catch (err) {
+      postgresConfigured = false;
+      error = err.message;
+    }
 
     return NextResponse.json({
+      postgresConfigured,
+      scoreCount: scores.length,
+      scores: scores,
+      error: error,
       timestamp: new Date().toISOString(),
-      kvConfigured: false,
-      error: error.message,
-      message: "KV nu este configurat corect",
     });
-  }
-}
-
-// Funcția pentru încărcarea scorurilor (din API-ul principal)
-async function loadScores() {
-  try {
-    const { kv } = await import("@vercel/kv");
-    const SCORES_KEY = "game_scores";
-    const kvScores = await kv.get(SCORES_KEY);
-    return kvScores || [];
   } catch (error) {
-    console.log("KV not configured, using in-memory storage:", error.message);
-    return [];
+    return NextResponse.json(
+      {
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      },
+      { status: 500 }
+    );
   }
 }
