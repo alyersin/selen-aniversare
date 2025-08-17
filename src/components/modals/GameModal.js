@@ -42,7 +42,7 @@ export default function GameModal({
             </div>
             <div className={styles.gameButtons}>
               <button type="submit" className={styles.startGameButton}>
-                🎮 Începe jocul
+                Începe jocul
               </button>
               <button
                 type="button"
