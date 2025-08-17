@@ -69,7 +69,7 @@ export default function FullRankingPage() {
         ) : (
           <>
             <div className={styles.rankingStatsPage}>
-              <p>📈 Total jucători: {highScores.length}</p>
+              <p>Total jucători: {highScores.length}</p>
               {highScores.length > 0 && (
                 <p>⚡ Cel mai rapid: {formatTime(highScores[0].score)}</p>
               )}
@@ -100,7 +100,7 @@ export default function FullRankingPage() {
             </div>
 
             <div className={styles.rankingPageInstructions}>
-              <h3>🎮 Cum să joci:</h3>
+              <h3>Cum să joci:</h3>
               <p>1. Sparge toate baloanele roșii de pe pagina principală</p>
               <p>
                 2. Apasă &quot;Da, vreau să joc!&quot; în modalul care apare

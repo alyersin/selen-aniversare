@@ -93,7 +93,7 @@ export default function RankingModal({ showRanking, closeRanking }) {
               )}
 
               <div className={styles.rankingStats}>
-                <p>📈 Total jucători: {highScores.length}</p>
+                <p>Total jucători: {highScores.length}</p>
                 {highScores.length > 0 && (
                   <p>⚡ Cel mai rapid: {formatTime(highScores[0].score)}</p>
                 )}

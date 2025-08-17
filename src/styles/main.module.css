@@ -2568,6 +2568,8 @@
   backdrop-filter: blur(10px);
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .gameStats {
@@ -2577,6 +2579,8 @@
   font-size: 1.1rem;
   font-weight: bold;
   color: #2d3436;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .gameArea {
@@ -2593,6 +2597,8 @@
   transition: all 0.3s ease;
   user-select: none;
   animation: float 3s ease-in-out infinite;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .gameBalloon:hover {
