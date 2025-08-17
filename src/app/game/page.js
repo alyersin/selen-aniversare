@@ -108,18 +108,20 @@ function BalloonGameContent() {
                 let newVx = balloon.vx;
                 let newVy = balloon.vy;
 
-                                 // Bounce off walls within the safe container area
-                 const containerWidth = window.innerWidth - 40; // 20px margins on each side
-                 const containerHeight = window.innerHeight - 160; // 80px top margin, 80px bottom margin
-                 
-                 if (newX <= 20 || newX >= containerWidth - 20) {
-                   newVx = -newVx;
-                   newX = Math.max(20, Math.min(containerWidth - 20, newX));
-                 }
-                 if (newY <= 80 || newY >= containerHeight - 20) {
-                   newVy = -newVy;
-                   newY = Math.max(80, Math.min(containerHeight - 20, newY));
-                 }
+                // Bounce off walls within the safe container area using percentages
+                const maxX = 85; // Maximum 85% from left
+                const minX = 5; // Minimum 5% from left
+                const maxY = 85; // Maximum 85% from top
+                const minY = 15; // Minimum 15% from top (to avoid header)
+
+                if (newX <= minX || newX >= maxX) {
+                  newVx = -newVx;
+                  newX = Math.max(minX, Math.min(maxX, newX));
+                }
+                if (newY <= minY || newY >= maxY) {
+                  newVy = -newVy;
+                  newY = Math.max(minY, Math.min(maxY, newY));
+                }
 
                 return {
                   ...balloon,
