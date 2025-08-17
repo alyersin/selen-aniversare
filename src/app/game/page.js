@@ -66,11 +66,11 @@ function BalloonGameContent() {
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
 
-      // Calculate safe boundaries for initial positioning
-      const marginXLeft = Math.max(10, screenWidth * 0.02); // REDUS: 15px -> 10px, 3% -> 2% (stânga)
-      const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
-      const marginYTop = Math.max(5, screenHeight * 0.01); // REDUS: 10px -> 5px, 2% -> 1%
-      const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
+             // Calculate safe boundaries for initial positioning
+       const marginXLeft = Math.max(5, screenWidth * 0.01); // REDUS: 10px -> 5px, 2% -> 1% (stânga)
+       const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
+       const marginYTop = Math.max(2, screenHeight * 0.005); // REDUS: 5px -> 2px, 1% -> 0.5% (sus)
+       const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
       const maxX = screenWidth - marginXRight;
       const minX = marginXLeft;
@@ -126,11 +126,11 @@ function BalloonGameContent() {
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
 
-                // Calculate safe boundaries based on screen size
-                const marginXLeft = Math.max(10, screenWidth * 0.02); // REDUS: 15px -> 10px, 3% -> 2% (stânga)
-                const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
-                const marginYTop = Math.max(5, screenHeight * 0.01); // REDUS: 10px -> 5px, 2% -> 1%
-                const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
+                                 // Calculate safe boundaries based on screen size
+                 const marginXLeft = Math.max(5, screenWidth * 0.01); // REDUS: 10px -> 5px, 2% -> 1% (stânga)
+                 const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
+                 const marginYTop = Math.max(2, screenHeight * 0.005); // REDUS: 5px -> 2px, 1% -> 0.5% (sus)
+                 const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
                 const maxX = screenWidth - marginXRight;
                 const minX = marginXLeft;
@@ -193,10 +193,10 @@ function BalloonGameContent() {
 
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
-            const marginXLeft = Math.max(10, screenWidth * 0.02); // REDUS: 15px -> 10px, 3% -> 2% (stânga)
-            const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
-            const marginYTop = Math.max(5, screenHeight * 0.01); // REDUS: 10px -> 5px, 2% -> 1%
-            const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
+                         const marginXLeft = Math.max(5, screenWidth * 0.01); // REDUS: 10px -> 5px, 2% -> 1% (stânga)
+             const marginXRight = Math.max(25, screenWidth * 0.04); // MĂRIT: 15px -> 25px, 3% -> 4% (dreapta)
+             const marginYTop = Math.max(2, screenHeight * 0.005); // REDUS: 5px -> 2px, 1% -> 0.5% (sus)
+             const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
             // Clamp balloon position to new screen boundaries
             const clampedX = Math.max(
