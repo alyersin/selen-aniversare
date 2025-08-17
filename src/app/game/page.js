@@ -66,9 +66,9 @@ function BalloonGameContent() {
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
 
-      // Calculate safe boundaries for initial positioning
-      const marginX = Math.max(50, screenWidth * 0.08);
-      const marginY = Math.max(150, screenHeight * 0.2);
+             // Calculate safe boundaries for initial positioning
+       const marginX = Math.max(50, screenWidth * 0.08);
+       const marginY = Math.max(80, screenHeight * 0.1);
 
       const maxX = screenWidth - marginX;
       const minX = marginX;
@@ -124,9 +124,9 @@ function BalloonGameContent() {
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
 
-                // Calculate safe boundaries based on screen size
-                const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
-                const marginY = Math.max(150, screenHeight * 0.2); // At least 150px or 20% of screen height
+                                 // Calculate safe boundaries based on screen size
+                 const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
+                 const marginY = Math.max(80, screenHeight * 0.1); // At least 80px or 10% of screen height
 
                 const maxX = screenWidth - marginX;
                 const minX = marginX;
@@ -189,8 +189,8 @@ function BalloonGameContent() {
 
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
-            const marginX = Math.max(50, screenWidth * 0.08);
-            const marginY = Math.max(150, screenHeight * 0.2);
+                         const marginX = Math.max(50, screenWidth * 0.08);
+             const marginY = Math.max(80, screenHeight * 0.1);
 
             // Clamp balloon position to new screen boundaries
             const clampedX = Math.max(
