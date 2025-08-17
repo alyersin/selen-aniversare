@@ -67,7 +67,9 @@ export default function RankingModal({ showRanking, closeRanking }) {
                       {index === 2 && "🥉"}
                     </div>
                     <div className={styles.playerInfo}>
-                      <span className={styles.playerName}>{score.username}</span>
+                      <span className={styles.playerName}>
+                        {score.username}
+                      </span>
                       <span className={styles.scoreDate}>
                         {new Date(score.timestamp).toLocaleDateString()}
                       </span>

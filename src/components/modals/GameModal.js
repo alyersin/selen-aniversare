@@ -34,7 +34,7 @@ export default function GameModal({
                 id="playerName"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="ex: Selen, Alex, SuperPlayer"
+                placeholder="ex: Alex, SuperPlayer"
                 className={styles.playerNameInput}
                 required
                 maxLength="20"
