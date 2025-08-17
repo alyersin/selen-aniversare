@@ -70,8 +70,8 @@ function BalloonGameContent() {
           y: Math.random() * (window.innerHeight - 120) + 80, // Reduced margin for mobile
           popped: false,
           color: getRandomBalloonColor(),
-          vx: isInsanityMode ? (Math.random() - 0.5) * 86 : 0, // velocity X for insanity mode (MUCH faster!)
-          vy: isInsanityMode ? (Math.random() - 0.5) * 86 : 0, // velocity Y for insanity mode (MUCH faster!)
+          vx: isInsanityMode ? (Math.random() - 0.5) * 150 : 0, // velocity X for insanity mode (MUCH faster!)
+          vy: isInsanityMode ? (Math.random() - 0.5) * 150 : 0, // velocity Y for insanity mode (MUCH faster!)
         });
       }
       setBalloons(newBalloons);
@@ -108,27 +108,27 @@ function BalloonGameContent() {
                 let newVx = balloon.vx;
                 let newVy = balloon.vy;
 
-                                 // Bounce off walls using actual screen dimensions
-                 const screenWidth = window.innerWidth;
-                 const screenHeight = window.innerHeight;
-                 
-                 // Calculate safe boundaries based on screen size
-                 const marginX = Math.max(30, screenWidth * 0.05); // At least 30px or 5% of screen width
-                 const marginY = Math.max(80, screenHeight * 0.1); // At least 80px or 10% of screen height
-                 
-                 const maxX = screenWidth - marginX;
-                 const minX = marginX;
-                 const maxY = screenHeight - marginY;
-                 const minY = marginY;
-                 
-                 if (newX <= minX || newX >= maxX) {
-                   newVx = -newVx;
-                   newX = Math.max(minX, Math.min(maxX, newX));
-                 }
-                 if (newY <= minY || newY >= maxY) {
-                   newVy = -newVy;
-                   newY = Math.max(minY, Math.min(maxY, newY));
-                 }
+                // Bounce off walls using actual screen dimensions
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+
+                // Calculate safe boundaries based on screen size
+                const marginX = Math.max(30, screenWidth * 0.05); // At least 30px or 5% of screen width
+                const marginY = Math.max(80, screenHeight * 0.1); // At least 80px or 10% of screen height
+
+                const maxX = screenWidth - marginX;
+                const minX = marginX;
+                const maxY = screenHeight - marginY;
+                const minY = marginY;
+
+                if (newX <= minX || newX >= maxX) {
+                  newVx = -newVx;
+                  newX = Math.max(minX, Math.min(maxX, newX));
+                }
+                if (newY <= minY || newY >= maxY) {
+                  newVy = -newVy;
+                  newY = Math.max(minY, Math.min(maxY, newY));
+                }
 
                 return {
                   ...balloon,
@@ -140,8 +140,8 @@ function BalloonGameContent() {
               })
             );
           },
-          isInsanityMode ? 1000 : 2000
-        ); // Extremely slow updates for maximum stability
+          isInsanityMode ? 50 : 100
+        ); // Fast updates for smooth movement
 
         setBalloonMovementInterval(movementInterval);
       }
@@ -174,16 +174,22 @@ function BalloonGameContent() {
         setBalloons((prev) =>
           prev.map((balloon) => {
             if (balloon.popped) return balloon;
-            
+
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             const marginX = Math.max(30, screenWidth * 0.05);
             const marginY = Math.max(80, screenHeight * 0.1);
-            
+
             // Clamp balloon position to new screen boundaries
-            const clampedX = Math.max(marginX, Math.min(screenWidth - marginX, balloon.x));
-            const clampedY = Math.max(marginY, Math.min(screenHeight - marginY, balloon.y));
-            
+            const clampedX = Math.max(
+              marginX,
+              Math.min(screenWidth - marginX, balloon.x)
+            );
+            const clampedY = Math.max(
+              marginY,
+              Math.min(screenHeight - marginY, balloon.y)
+            );
+
             return {
               ...balloon,
               x: clampedX,
@@ -194,8 +200,8 @@ function BalloonGameContent() {
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [gameStarted, gameFinished]);
 
   const startGame = (insanityMode = false) => {

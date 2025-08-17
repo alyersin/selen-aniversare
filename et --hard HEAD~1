@@ -181,4 +181,157 @@
              "Content-Type": "application/json",[m
            },[m
            body: JSON.stringify({[m
-[
+[31m-            username: playerName,[m
+[31m-            score: gameDuration,[m
+[31m-            gameMode: "normal",[m
+[32m+[m[32m            player: playerName,[m
+[32m+[m[32m            time: gameDuration,[m
+[32m+[m[32m            date: new Date().toLocaleDateString(),[m
+           }),[m
+         });[m
+ [m
+[36m@@ -353,7 +302,6 @@[m [mfunction BalloonGameContent() {[m
+     }[m
+     if (balloonMovementInterval) {[m
+       clearInterval(balloonMovementInterval);[m
+[31m-      setBalloonMovementInterval(null);[m
+     }[m
+   }, [[m
+     isInsanityMode,[m
+[36m@@ -362,6 +310,7 @@[m [mfunction BalloonGameContent() {[m
+     totalBalloons,[m
+     playerName,[m
+     balloonMovementInterval,[m
+[32m+[m[32m    getInsanityCriticism,[m
+   ]);[m
+ [m
+   // All criticism messages organized by time thresholds[m
+[36m@@ -774,7 +723,7 @@[m [mfunction BalloonGameContent() {[m
+         <div className={styles.gameStartContent}>[m
+           <h1>🎈 Jocul baloanelor</h1>[m
+           <p>[m
+[31m-            Bună, <strong>{playerName}</strong>![m
+[32m+[m[32m            Bună, <strong>{playerName}</strong>! 👋[m
+           </p>[m
+ [m
+           {showInsanityOption && ([m
+[36m@@ -788,7 +737,7 @@[m [mfunction BalloonGameContent() {[m
+ [m
+           <div className={styles.gameModes}>[m
+             <div className={styles.normalMode}>[m
+[31m-              <h3>Mod Normal:</h3>[m
+[32m+[m[32m              <h3>📋 Mod Normal:</h3>[m
+               <ul>[m
+                 <li>💥 Sparge toate cele {totalBalloons} baloane</li>[m
+                 <li>⏱️ Timpul se măsoară automat</li>[m
+[36m@@ -799,7 +748,7 @@[m [mfunction BalloonGameContent() {[m
+                 onClick={() => startGame(false)}[m
+                 className={styles.startGameBtn}[m
+               >[m
+[31m-                Începe jocul normal[m
+[32m+[m[32m                🎮 Începe jocul normal[m
+               </button>[m
+             </div>[m
+ [m
+[36m@@ -832,54 +781,38 @@[m [mfunction BalloonGameContent() {[m
+   }[m
+ [m
+   return ([m
+[31m-    <>[m
+[31m-      {/* Game Header - Completely isolated from game logic */}[m
+[31m-      <div className={styles.gameHeaderWrapper}>[m
+[31m-        <header className={styles.gameHeaderFixed}>[m
+[31m-          <div className={styles.gameStats}>[m
+[31m-            <div className={styles.gameStatItem}>[m
+[31m-              <span>⏱️ Timp: {formatTime(time)}</span>[m
+[31m-            </div>[m
+[31m-            <div className={styles.gameStatItem}>[m
+[31m-              <span>[m
+[31m-                💥 Sparte: {poppedCount}/{totalBalloons}[m
+[31m-              </span>[m
+[31m-            </div>[m
+[31m-            <div className={styles.gameStatItem}>[m
+[31m-              <span>👤 {playerName}</span>[m
+[31m-            </div>[m
+[31m-            {isInsanityMode && ([m
+[31m-              <div className={styles.gameStatItem}>[m
+[31m-                <span className={styles.insanityBadge}>🔥 INSANITY</span>[m
+[31m-              </div>[m
+[31m-            )}[m
+[31m-          </div>[m
+[31m-        </header>[m
+[32m+[m[32m    <div className={styles.gamePageContainer}>[m
+[32m+[m[32m      {/* Game Header */}[m
+[32m+[m[32m      <div className={styles.gameHeader}>[m
+[32m+[m[32m        <div className={styles.gameStats}>[m
+[32m+[m[32m          <span>⏱️ Timp: {formatTime(time)}</span>[m
+[32m+[m[32m          <span>[m
+[32m+[m[32m            💥 Sparte: {poppedCount}/{totalBalloons}[m
+[32m+[m[32m          </span>[m
+[32m+[m[32m          <span>👤 {playerName}</span>[m
+[32m+[m[32m          {isInsanityMode && ([m
+[32m+[m[32m            <span className={styles.insanityBadge}>🔥 INSANITY</span>[m
+[32m+[m[32m          )}[m
+[32m+[m[32m        </div>[m
+       </div>[m
+ [m
+[31m-      {/* Game Main - Completely separate */}[m
+[31m-      <div className={styles.gamePageContainer}>[m
+[31m-        <main className={styles.gameMainContainer}>[m
+[31m-          <div className={styles.gameArea}>[m
+[31m-            <div className={styles.gameBalloonContainer}>[m
+[31m-              {balloons.map((balloon) => ([m
+[31m-                <div[m
+[31m-                  key={balloon.id}[m
+[31m-                  className={`${styles.gameBalloon} ${[m
+[31m-                    balloon.popped ? styles.popped : ""[m
+[31m-                  }`}[m
+[31m-                  style={{[m
+[31m-                    left: balloon.x,[m
+[31m-                    top: balloon.y,[m
+[31m-                  }}[m
+[31m-                  onClick={() => !balloon.popped && popBalloon(balloon.id)}[m
+[31m-                >[m
+[31m-                  {balloon.popped ? "💥" : balloon.color}[m
+[31m-                </div>[m
+[31m-              ))}[m
+[31m-            </div>[m
+[32m+[m[32m      {/* Game Area */}[m
+[32m+[m[32m      <div className={styles.gameArea}>[m
+[32m+[m[32m        {balloons.map((balloon) => ([m
+[32m+[m[32m          <div[m
+[32m+[m[32m            key={balloon.id}[m
+[32m+[m[32m            className={`${styles.gameBalloon} ${[m
+[32m+[m[32m              balloon.popped ? styles.popped : ""[m
+[32m+[m[32m            }`}[m
+[32m+[m[32m            style={{[m
+[32m+[m[32m              left: balloon.x,[m
+[32m+[m[32m              top: balloon.y,[m
+[32m+[m[32m            }}[m
+[32m+[m[32m            onClick={() => !balloon.popped && popBalloon(balloon.id)}[m
+[32m+[m[32m          >[m
+[32m+[m[32m            {balloon.popped ? "💥" : balloon.color}[m
+           </div>[m
+[31m-        </main>[m
+[32m+[m[32m        ))}[m
+       </div>[m
+ [m
+       {/* Game Finished Modal */}[m
+[36m@@ -1001,7 +934,7 @@[m [mfunction BalloonGameContent() {[m
+ [m
+             <div className={styles.gameFinishedButtons}>[m
+               <button onClick={playAgain} className={styles.playAgainBtn}>[m
+[31m-                Joacă din nou[m
+[32m+[m[32m                🎮 Joacă din nou[m
+               </button>[m
+               <button onClick={goBack} className={styles.backToInvitationBtn}>[m
+                 ← Înapoi la invitație[m
+[36m@@ -1010,7 +943,7 @@[m [mfunction BalloonGameContent() {[m
+           </div>[m
+         </div>[m
+       )}[m
+[31m-    </>[m
+[32m+[m[32m    </div>[m
+   );[m
+ }[m
+ [m
