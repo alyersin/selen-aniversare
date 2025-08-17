@@ -97,36 +97,42 @@ function BalloonGameContent() {
 
       // Balloon movement for insanity mode
       if (isInsanityMode && !balloonMovementInterval) {
-        const movementInterval = setInterval(() => {
-          setBalloons((prev) =>
-            prev.map((balloon) => {
-              if (balloon.popped) return balloon;
+        const movementInterval = setInterval(
+          () => {
+            setBalloons((prev) =>
+              prev.map((balloon) => {
+                if (balloon.popped) return balloon;
 
-              let newX = balloon.x + balloon.vx;
-              let newY = balloon.y + balloon.vy;
-              let newVx = balloon.vx;
-              let newVy = balloon.vy;
+                let newX = balloon.x + balloon.vx;
+                let newY = balloon.y + balloon.vy;
+                let newVx = balloon.vx;
+                let newVy = balloon.vy;
 
-              // Bounce off walls with reduced margins for mobile
-              if (newX <= 0 || newX >= window.innerWidth - 60) {
-                newVx = -newVx;
-                newX = Math.max(0, Math.min(window.innerWidth - 60, newX));
-              }
-              if (newY <= 80 || newY >= window.innerHeight - 120) {
-                newVy = -newVy;
-                newY = Math.max(80, Math.min(window.innerHeight - 120, newY));
-              }
+                                 // Bounce off walls within the safe container area
+                 const containerWidth = window.innerWidth - 80; // 40px margins on each side
+                 const containerHeight = window.innerHeight - 200; // 100px top margin, 100px bottom margin
+                 
+                 if (newX <= 20 || newX >= containerWidth - 20) {
+                   newVx = -newVx;
+                   newX = Math.max(20, Math.min(containerWidth - 20, newX));
+                 }
+                 if (newY <= 100 || newY >= containerHeight - 20) {
+                   newVy = -newVy;
+                   newY = Math.max(100, Math.min(containerHeight - 20, newY));
+                 }
 
-              return {
-                ...balloon,
-                x: newX,
-                y: newY,
-                vx: newVx,
-                vy: newVy,
-              };
-            })
-          );
-        }, isInsanityMode ? 1000 : 2000); // Extremely slow updates for maximum stability
+                return {
+                  ...balloon,
+                  x: newX,
+                  y: newY,
+                  vx: newVx,
+                  vy: newVy,
+                };
+              })
+            );
+          },
+          isInsanityMode ? 1000 : 2000
+        ); // Extremely slow updates for maximum stability
 
         setBalloonMovementInterval(movementInterval);
       }
@@ -814,21 +820,23 @@ function BalloonGameContent() {
       <div className={styles.gamePageContainer}>
         <main className={styles.gameMainContainer}>
           <div className={styles.gameArea}>
-            {balloons.map((balloon) => (
-              <div
-                key={balloon.id}
-                className={`${styles.gameBalloon} ${
-                  balloon.popped ? styles.popped : ""
-                }`}
-                style={{
-                  left: balloon.x,
-                  top: balloon.y,
-                }}
-                onClick={() => !balloon.popped && popBalloon(balloon.id)}
-              >
-                {balloon.popped ? "💥" : balloon.color}
-              </div>
-            ))}
+            <div className={styles.gameBalloonContainer}>
+              {balloons.map((balloon) => (
+                <div
+                  key={balloon.id}
+                  className={`${styles.gameBalloon} ${
+                    balloon.popped ? styles.popped : ""
+                  }`}
+                  style={{
+                    left: balloon.x,
+                    top: balloon.y,
+                  }}
+                  onClick={() => !balloon.popped && popBalloon(balloon.id)}
+                >
+                  {balloon.popped ? "💥" : balloon.color}
+                </div>
+              ))}
+            </div>
           </div>
         </main>
       </div>
