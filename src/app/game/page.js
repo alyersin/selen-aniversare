@@ -42,12 +42,12 @@ function BalloonGameContent() {
         const response = await fetch("/api/scores");
         if (response.ok) {
           const data = await response.json();
-          setHighScores(data.scores || []);
+          setHighScores(data || []);
 
           // Check if current player is in top 3
-          const top3Players = data.scores?.slice(0, 3) || [];
+          const top3Players = data?.slice(0, 3) || [];
           const isPlayerInTop3 = top3Players.some(
-            (score) => score.player === playerName
+            (score) => score.username === playerName
           );
           setShowInsanityOption(isPlayerInTop3);
         }
@@ -284,9 +284,9 @@ function BalloonGameContent() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            player: playerName,
-            time: gameDuration,
-            date: new Date().toLocaleDateString(),
+            username: playerName,
+            score: gameDuration,
+            gameMode: "normal",
           }),
         });
 
