@@ -1420,10 +1420,10 @@
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0px) translateZ(0) translate3d(0, 0, 0);
+    transform: translateY(0px) translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-20px) translateZ(0) translate3d(0, 0, 0);
+    transform: translateY(-20px) translate3d(0, 0, 0);
   }
 }
 
@@ -2602,6 +2602,8 @@
     Arial, sans-serif;
   transform: translateZ(0);
   will-change: transform;
+  /* Prevent any layout shifts */
+  overflow: hidden;
 }
 
 .gameHeader {
@@ -2648,6 +2650,14 @@
   transform-style: preserve-3d;
   filter: none;
   mix-blend-mode: normal;
+  /* Prevent any animation interference */
+  animation: none !important;
+  transition: none !important;
+  /* Force hardware acceleration */
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  -o-transform: translate3d(0, 0, 0);
 }
 
 .gameMainContainer {
@@ -2661,6 +2671,8 @@
   will-change: transform;
   backface-visibility: hidden;
   perspective: 1000px;
+  /* Prevent header interference */
+  overflow: hidden;
 }
 
 .gameStats {
@@ -2742,7 +2754,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   user-select: none;
-  animation: float 3s ease-in-out infinite;
+  /* animation: float 3s ease-in-out infinite; */
   transform: translateZ(0);
   will-change: transform;
 }

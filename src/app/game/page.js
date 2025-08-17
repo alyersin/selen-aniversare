@@ -786,7 +786,7 @@ function BalloonGameContent() {
 
   return (
     <div className={styles.gamePageContainer}>
-      {/* Game Header - Completely separate */}
+      {/* Game Header - Completely separate and isolated */}
       <header className={styles.gameHeaderFixed}>
         <div className={styles.gameStats}>
           <div className={styles.gameStatItem}>
@@ -948,7 +948,7 @@ function BalloonGameContent() {
 
             <div className={styles.gameFinishedButtons}>
               <button onClick={playAgain} className={styles.playAgainBtn}>
-                🎮 Joacă din nou
+                Joacă din nou
               </button>
               <button onClick={goBack} className={styles.backToInvitationBtn}>
                 ← Înapoi la invitație
