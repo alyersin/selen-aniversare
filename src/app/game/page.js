@@ -63,11 +63,23 @@ function BalloonGameContent() {
   useEffect(() => {
     if (gameStarted && !gameFinished) {
       const newBalloons = [];
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      // Calculate safe boundaries for initial positioning
+      const marginX = Math.max(50, screenWidth * 0.08);
+      const marginY = Math.max(150, screenHeight * 0.2);
+
+      const maxX = screenWidth - marginX;
+      const minX = marginX;
+      const maxY = screenHeight - marginY;
+      const minY = marginY;
+
       for (let i = 0; i < totalBalloons; i++) {
         newBalloons.push({
           id: i,
-                     x: Math.random() * (window.innerWidth - 150) + 75, // Safe margin for mobile
-           y: Math.random() * (window.innerHeight - 300) + 150, // Safe margin for mobile
+          x: Math.random() * (maxX - minX) + minX, // Ensure balloon is within safe bounds
+          y: Math.random() * (maxY - minY) + minY, // Ensure balloon is within safe bounds
           popped: false,
           color: getRandomBalloonColor(),
           vx: isInsanityMode ? (Math.random() - 0.5) * 150 : 0, // velocity X for insanity mode (MUCH faster!)
@@ -112,9 +124,9 @@ function BalloonGameContent() {
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
 
-                                 // Calculate safe boundaries based on screen size
-                 const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
-                 const marginY = Math.max(150, screenHeight * 0.2); // At least 150px or 20% of screen height
+                // Calculate safe boundaries based on screen size
+                const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
+                const marginY = Math.max(150, screenHeight * 0.2); // At least 150px or 20% of screen height
 
                 const maxX = screenWidth - marginX;
                 const minX = marginX;
@@ -175,10 +187,10 @@ function BalloonGameContent() {
           prev.map((balloon) => {
             if (balloon.popped) return balloon;
 
-                         const screenWidth = window.innerWidth;
-             const screenHeight = window.innerHeight;
-             const marginX = Math.max(50, screenWidth * 0.08);
-             const marginY = Math.max(150, screenHeight * 0.2);
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const marginX = Math.max(50, screenWidth * 0.08);
+            const marginY = Math.max(150, screenHeight * 0.2);
 
             // Clamp balloon position to new screen boundaries
             const clampedX = Math.max(
