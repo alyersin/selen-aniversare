@@ -1420,10 +1420,10 @@
 @keyframes float {
   0%,
   100% {
-    transform: translateY(0px);
+    transform: translateY(0px) translateZ(0);
   }
   50% {
-    transform: translateY(-20px);
+    transform: translateY(-20px) translateZ(0);
   }
 }
 
@@ -2570,6 +2570,9 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transform: translateZ(0);
   will-change: transform;
+  isolation: isolate;
+  contain: layout style paint;
+  pointer-events: none;
 }
 
 .gameStats {
@@ -2581,6 +2584,22 @@
   color: #2d3436;
   transform: translateZ(0);
   will-change: transform;
+  isolation: isolate;
+  contain: layout style paint;
+  pointer-events: none;
+}
+
+.gameStats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2d3436;
+  transform: translateZ(0);
+  will-change: transform;
+  isolation: isolate;
+  contain: layout style paint;
 }
 
 .gameArea {
@@ -2588,6 +2607,8 @@
   width: 100%;
   height: 100vh;
   padding-top: 80px;
+  isolation: isolate;
+  contain: layout style paint;
 }
 
 .gameBalloon {
@@ -2596,7 +2617,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   user-select: none;
-  animation: float 3s ease-in-out infinite;
+  /* animation: float 3s ease-in-out infinite; */
   transform: translateZ(0);
   will-change: transform;
 }

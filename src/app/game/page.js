@@ -752,7 +752,7 @@ function BalloonGameContent() {
                 onClick={() => startGame(false)}
                 className={styles.startGameBtn}
               >
-                🎮 Începe jocul normal
+                Începe jocul normal
               </button>
             </div>
 
