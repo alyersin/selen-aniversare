@@ -66,10 +66,10 @@ function BalloonGameContent() {
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
 
-      // Calculate safe boundaries for initial positioning
-      const marginX = Math.max(50, screenWidth * 0.08);
-      const marginYTop = Math.max(20, screenHeight * 0.03); // REDUS: 40px -> 20px, 5% -> 3%
-      const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
+             // Calculate safe boundaries for initial positioning
+       const marginX = Math.max(50, screenWidth * 0.08);
+       const marginYTop = Math.max(10, screenHeight * 0.02); // REDUS: 20px -> 10px, 3% -> 2%
+       const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
       const maxX = screenWidth - marginX;
       const minX = marginX;
@@ -125,10 +125,10 @@ function BalloonGameContent() {
                 const screenWidth = window.innerWidth;
                 const screenHeight = window.innerHeight;
 
-                // Calculate safe boundaries based on screen size
-                const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
-                const marginYTop = Math.max(20, screenHeight * 0.03); // REDUS: 40px -> 20px, 5% -> 3%
-                const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
+                                 // Calculate safe boundaries based on screen size
+                 const marginX = Math.max(50, screenWidth * 0.08); // At least 50px or 8% of screen width
+                 const marginYTop = Math.max(10, screenHeight * 0.02); // REDUS: 20px -> 10px, 3% -> 2%
+                 const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
                 const maxX = screenWidth - marginX;
                 const minX = marginX;
@@ -192,7 +192,7 @@ function BalloonGameContent() {
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
                          const marginX = Math.max(50, screenWidth * 0.08);
-             const marginYTop = Math.max(20, screenHeight * 0.03); // REDUS: 40px -> 20px, 5% -> 3%
+             const marginYTop = Math.max(10, screenHeight * 0.02); // REDUS: 20px -> 10px, 3% -> 2%
              const marginYBottom = Math.max(140, screenHeight * 0.18); // MĂRIT: 120px -> 140px, 15% -> 18%
 
             // Clamp balloon position to new screen boundaries
