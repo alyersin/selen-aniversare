@@ -109,16 +109,16 @@ function BalloonGameContent() {
                 let newVy = balloon.vy;
 
                                  // Bounce off walls within the safe container area
-                 const containerWidth = window.innerWidth - 80; // 40px margins on each side
-                 const containerHeight = window.innerHeight - 200; // 100px top margin, 100px bottom margin
+                 const containerWidth = window.innerWidth - 40; // 20px margins on each side
+                 const containerHeight = window.innerHeight - 160; // 80px top margin, 80px bottom margin
                  
                  if (newX <= 20 || newX >= containerWidth - 20) {
                    newVx = -newVx;
                    newX = Math.max(20, Math.min(containerWidth - 20, newX));
                  }
-                 if (newY <= 100 || newY >= containerHeight - 20) {
+                 if (newY <= 80 || newY >= containerHeight - 20) {
                    newVy = -newVy;
-                   newY = Math.max(100, Math.min(containerHeight - 20, newY));
+                   newY = Math.max(80, Math.min(containerHeight - 20, newY));
                  }
 
                 return {
