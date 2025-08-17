@@ -15,7 +15,7 @@ export default function FullRankingPage() {
         const response = await fetch("/api/scores");
         if (response.ok) {
           const data = await response.json();
-          setHighScores(data.scores || []);
+          setHighScores(data || []);
         }
       } catch (error) {
         console.error("Error loading scores:", error);
@@ -69,9 +69,9 @@ export default function FullRankingPage() {
         ) : (
           <>
             <div className={styles.rankingStatsPage}>
-              <p>📈 Total jucători: {highScores.length}</p>
+              <p>Total jucători: {highScores.length}</p>
               {highScores.length > 0 && (
-                <p>⚡ Cel mai rapid: {formatTime(highScores[0].time)}</p>
+                <p>⚡ Cel mai rapid: {formatTime(highScores[0].score)}</p>
               )}
             </div>
 
@@ -86,19 +86,21 @@ export default function FullRankingPage() {
                   </div>
                   <div className={styles.fullPlayerInfo}>
                     <span className={styles.fullPlayerName}>
-                      {score.player}
+                      {score.username}
                     </span>
-                    <span className={styles.fullScoreDate}>{score.date}</span>
+                    <span className={styles.fullScoreDate}>
+                      {new Date(score.timestamp).toLocaleDateString()}
+                    </span>
                   </div>
                   <div className={styles.fullScoreTime}>
-                    {formatTime(score.time)}
+                    {formatTime(score.score)}
                   </div>
                 </div>
               ))}
             </div>
 
             <div className={styles.rankingPageInstructions}>
-              <h3>🎮 Cum să joci:</h3>
+              <h3>Cum să joci:</h3>
               <p>1. Sparge toate baloanele roșii de pe pagina principală</p>
               <p>
                 2. Apasă &quot;Da, vreau să joc!&quot; în modalul care apare

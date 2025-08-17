@@ -13,7 +13,7 @@ export default function RankingModal({ showRanking, closeRanking }) {
         const response = await fetch("/api/scores");
         if (response.ok) {
           const data = await response.json();
-          setHighScores(data.scores || []);
+          setHighScores(data || []);
         }
       } catch (error) {
         console.error("Error loading scores:", error);
@@ -67,11 +67,15 @@ export default function RankingModal({ showRanking, closeRanking }) {
                       {index === 2 && "🥉"}
                     </div>
                     <div className={styles.playerInfo}>
-                      <span className={styles.playerName}>{score.player}</span>
-                      <span className={styles.scoreDate}>{score.date}</span>
+                      <span className={styles.playerName}>
+                        {score.username}
+                      </span>
+                      <span className={styles.scoreDate}>
+                        {new Date(score.timestamp).toLocaleDateString()}
+                      </span>
                     </div>
                     <div className={styles.scoreTime}>
-                      {formatTime(score.time)}
+                      {formatTime(score.score)}
                     </div>
                   </div>
                 ))}
@@ -89,9 +93,9 @@ export default function RankingModal({ showRanking, closeRanking }) {
               )}
 
               <div className={styles.rankingStats}>
-                <p>📈 Total jucători: {highScores.length}</p>
+                <p>Total jucători: {highScores.length}</p>
                 {highScores.length > 0 && (
-                  <p>⚡ Cel mai rapid: {formatTime(highScores[0].time)}</p>
+                  <p>⚡ Cel mai rapid: {formatTime(highScores[0].score)}</p>
                 )}
               </div>
 

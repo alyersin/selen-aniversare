@@ -42,12 +42,12 @@ function BalloonGameContent() {
         const response = await fetch("/api/scores");
         if (response.ok) {
           const data = await response.json();
-          setHighScores(data.scores || []);
+          setHighScores(data || []);
 
           // Check if current player is in top 3
-          const top3Players = data.scores?.slice(0, 3) || [];
+          const top3Players = data?.slice(0, 3) || [];
           const isPlayerInTop3 = top3Players.some(
-            (score) => score.player === playerName
+            (score) => score.username === playerName
           );
           setShowInsanityOption(isPlayerInTop3);
         }
@@ -97,36 +97,51 @@ function BalloonGameContent() {
 
       // Balloon movement for insanity mode
       if (isInsanityMode && !balloonMovementInterval) {
-        const movementInterval = setInterval(() => {
-          setBalloons((prev) =>
-            prev.map((balloon) => {
-              if (balloon.popped) return balloon;
+        const movementInterval = setInterval(
+          () => {
+            setBalloons((prev) =>
+              prev.map((balloon) => {
+                if (balloon.popped) return balloon;
 
-              let newX = balloon.x + balloon.vx;
-              let newY = balloon.y + balloon.vy;
-              let newVx = balloon.vx;
-              let newVy = balloon.vy;
+                let newX = balloon.x + balloon.vx;
+                let newY = balloon.y + balloon.vy;
+                let newVx = balloon.vx;
+                let newVy = balloon.vy;
 
-              // Bounce off walls with reduced margins for mobile
-              if (newX <= 0 || newX >= window.innerWidth - 60) {
-                newVx = -newVx;
-                newX = Math.max(0, Math.min(window.innerWidth - 60, newX));
-              }
-              if (newY <= 80 || newY >= window.innerHeight - 120) {
-                newVy = -newVy;
-                newY = Math.max(80, Math.min(window.innerHeight - 120, newY));
-              }
+                                 // Bounce off walls using actual screen dimensions
+                 const screenWidth = window.innerWidth;
+                 const screenHeight = window.innerHeight;
+                 
+                 // Calculate safe boundaries based on screen size
+                 const marginX = Math.max(30, screenWidth * 0.05); // At least 30px or 5% of screen width
+                 const marginY = Math.max(80, screenHeight * 0.1); // At least 80px or 10% of screen height
+                 
+                 const maxX = screenWidth - marginX;
+                 const minX = marginX;
+                 const maxY = screenHeight - marginY;
+                 const minY = marginY;
+                 
+                 if (newX <= minX || newX >= maxX) {
+                   newVx = -newVx;
+                   newX = Math.max(minX, Math.min(maxX, newX));
+                 }
+                 if (newY <= minY || newY >= maxY) {
+                   newVy = -newVy;
+                   newY = Math.max(minY, Math.min(maxY, newY));
+                 }
 
-              return {
-                ...balloon,
-                x: newX,
-                y: newY,
-                vx: newVx,
-                vy: newVy,
-              };
-            })
-          );
-        }, 50); // Update every 50ms for smooth movement
+                return {
+                  ...balloon,
+                  x: newX,
+                  y: newY,
+                  vx: newVx,
+                  vy: newVy,
+                };
+              })
+            );
+          },
+          isInsanityMode ? 1000 : 2000
+        ); // Extremely slow updates for maximum stability
 
         setBalloonMovementInterval(movementInterval);
       }
@@ -150,6 +165,38 @@ function BalloonGameContent() {
       setShouldFinishGame(false);
     }
   }, [shouldFinishGame]);
+
+  // Handle window resize to adjust balloon boundaries
+  useEffect(() => {
+    const handleResize = () => {
+      // Force balloon position update on resize
+      if (gameStarted && !gameFinished) {
+        setBalloons((prev) =>
+          prev.map((balloon) => {
+            if (balloon.popped) return balloon;
+            
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const marginX = Math.max(30, screenWidth * 0.05);
+            const marginY = Math.max(80, screenHeight * 0.1);
+            
+            // Clamp balloon position to new screen boundaries
+            const clampedX = Math.max(marginX, Math.min(screenWidth - marginX, balloon.x));
+            const clampedY = Math.max(marginY, Math.min(screenHeight - marginY, balloon.y));
+            
+            return {
+              ...balloon,
+              x: clampedX,
+              y: clampedY,
+            };
+          })
+        );
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [gameStarted, gameFinished]);
 
   const startGame = (insanityMode = false) => {
     if (insanityMode) {
@@ -284,9 +331,9 @@ function BalloonGameContent() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            player: playerName,
-            time: gameDuration,
-            date: new Date().toLocaleDateString(),
+            username: playerName,
+            score: gameDuration,
+            gameMode: "normal",
           }),
         });
 
@@ -727,7 +774,7 @@ function BalloonGameContent() {
         <div className={styles.gameStartContent}>
           <h1>🎈 Jocul baloanelor</h1>
           <p>
-            Bună, <strong>{playerName}</strong>! 👋
+            Bună, <strong>{playerName}</strong>!
           </p>
 
           {showInsanityOption && (
@@ -741,7 +788,7 @@ function BalloonGameContent() {
 
           <div className={styles.gameModes}>
             <div className={styles.normalMode}>
-              <h3>📋 Mod Normal:</h3>
+              <h3>Mod Normal:</h3>
               <ul>
                 <li>💥 Sparge toate cele {totalBalloons} baloane</li>
                 <li>⏱️ Timpul se măsoară automat</li>
@@ -752,7 +799,7 @@ function BalloonGameContent() {
                 onClick={() => startGame(false)}
                 className={styles.startGameBtn}
               >
-                🎮 Începe jocul normal
+                Începe jocul normal
               </button>
             </div>
 
@@ -785,38 +832,54 @@ function BalloonGameContent() {
   }
 
   return (
-    <div className={styles.gamePageContainer}>
-      {/* Game Header */}
-      <div className={styles.gameHeader}>
-        <div className={styles.gameStats}>
-          <span>⏱️ Timp: {formatTime(time)}</span>
-          <span>
-            💥 Sparte: {poppedCount}/{totalBalloons}
-          </span>
-          <span>👤 {playerName}</span>
-          {isInsanityMode && (
-            <span className={styles.insanityBadge}>🔥 INSANITY</span>
-          )}
-        </div>
+    <>
+      {/* Game Header - Completely isolated from game logic */}
+      <div className={styles.gameHeaderWrapper}>
+        <header className={styles.gameHeaderFixed}>
+          <div className={styles.gameStats}>
+            <div className={styles.gameStatItem}>
+              <span>⏱️ Timp: {formatTime(time)}</span>
+            </div>
+            <div className={styles.gameStatItem}>
+              <span>
+                💥 Sparte: {poppedCount}/{totalBalloons}
+              </span>
+            </div>
+            <div className={styles.gameStatItem}>
+              <span>👤 {playerName}</span>
+            </div>
+            {isInsanityMode && (
+              <div className={styles.gameStatItem}>
+                <span className={styles.insanityBadge}>🔥 INSANITY</span>
+              </div>
+            )}
+          </div>
+        </header>
       </div>
 
-      {/* Game Area */}
-      <div className={styles.gameArea}>
-        {balloons.map((balloon) => (
-          <div
-            key={balloon.id}
-            className={`${styles.gameBalloon} ${
-              balloon.popped ? styles.popped : ""
-            }`}
-            style={{
-              left: balloon.x,
-              top: balloon.y,
-            }}
-            onClick={() => !balloon.popped && popBalloon(balloon.id)}
-          >
-            {balloon.popped ? "💥" : balloon.color}
+      {/* Game Main - Completely separate */}
+      <div className={styles.gamePageContainer}>
+        <main className={styles.gameMainContainer}>
+          <div className={styles.gameArea}>
+            <div className={styles.gameBalloonContainer}>
+              {balloons.map((balloon) => (
+                <div
+                  key={balloon.id}
+                  className={`${styles.gameBalloon} ${
+                    balloon.popped ? styles.popped : ""
+                  }`}
+                  style={{
+                    left: balloon.x,
+                    top: balloon.y,
+                  }}
+                  onClick={() => !balloon.popped && popBalloon(balloon.id)}
+                >
+                  {balloon.popped ? "💥" : balloon.color}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        </main>
       </div>
 
       {/* Game Finished Modal */}
@@ -938,7 +1001,7 @@ function BalloonGameContent() {
 
             <div className={styles.gameFinishedButtons}>
               <button onClick={playAgain} className={styles.playAgainBtn}>
-                🎮 Joacă din nou
+                Joacă din nou
               </button>
               <button onClick={goBack} className={styles.backToInvitationBtn}>
                 ← Înapoi la invitație
@@ -947,7 +1010,7 @@ function BalloonGameContent() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
