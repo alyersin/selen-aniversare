@@ -108,20 +108,27 @@ function BalloonGameContent() {
                 let newVx = balloon.vx;
                 let newVy = balloon.vy;
 
-                // Bounce off walls within the safe container area using percentages
-                const maxX = 85; // Maximum 85% from left
-                const minX = 5; // Minimum 5% from left
-                const maxY = 85; // Maximum 85% from top
-                const minY = 15; // Minimum 15% from top (to avoid header)
-
-                if (newX <= minX || newX >= maxX) {
-                  newVx = -newVx;
-                  newX = Math.max(minX, Math.min(maxX, newX));
-                }
-                if (newY <= minY || newY >= maxY) {
-                  newVy = -newVy;
-                  newY = Math.max(minY, Math.min(maxY, newY));
-                }
+                                 // Bounce off walls using actual screen dimensions
+                 const screenWidth = window.innerWidth;
+                 const screenHeight = window.innerHeight;
+                 
+                 // Calculate safe boundaries based on screen size
+                 const marginX = Math.max(30, screenWidth * 0.05); // At least 30px or 5% of screen width
+                 const marginY = Math.max(80, screenHeight * 0.1); // At least 80px or 10% of screen height
+                 
+                 const maxX = screenWidth - marginX;
+                 const minX = marginX;
+                 const maxY = screenHeight - marginY;
+                 const minY = marginY;
+                 
+                 if (newX <= minX || newX >= maxX) {
+                   newVx = -newVx;
+                   newX = Math.max(minX, Math.min(maxX, newX));
+                 }
+                 if (newY <= minY || newY >= maxY) {
+                   newVy = -newVy;
+                   newY = Math.max(minY, Math.min(maxY, newY));
+                 }
 
                 return {
                   ...balloon,
@@ -158,6 +165,38 @@ function BalloonGameContent() {
       setShouldFinishGame(false);
     }
   }, [shouldFinishGame]);
+
+  // Handle window resize to adjust balloon boundaries
+  useEffect(() => {
+    const handleResize = () => {
+      // Force balloon position update on resize
+      if (gameStarted && !gameFinished) {
+        setBalloons((prev) =>
+          prev.map((balloon) => {
+            if (balloon.popped) return balloon;
+            
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const marginX = Math.max(30, screenWidth * 0.05);
+            const marginY = Math.max(80, screenHeight * 0.1);
+            
+            // Clamp balloon position to new screen boundaries
+            const clampedX = Math.max(marginX, Math.min(screenWidth - marginX, balloon.x));
+            const clampedY = Math.max(marginY, Math.min(screenHeight - marginY, balloon.y));
+            
+            return {
+              ...balloon,
+              x: clampedX,
+              y: clampedY,
+            };
+          })
+        );
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [gameStarted, gameFinished]);
 
   const startGame = (insanityMode = false) => {
     if (insanityMode) {

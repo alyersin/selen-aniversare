@@ -2792,9 +2792,7 @@
   /* animation: float 3s ease-in-out infinite; */
   transform: translateZ(0);
   will-change: transform;
-  /* Use percentage positioning */
-  left: 0;
-  top: 0;
+  /* Use pixel positioning for responsive behavior */
 }
 
 .gameBalloon:hover {
