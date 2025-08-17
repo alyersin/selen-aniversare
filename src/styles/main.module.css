@@ -2577,11 +2577,16 @@
   pointer-events: none;
   backface-visibility: hidden;
   perspective: 1000px;
+  /* Force stable rendering */
+  transform-style: preserve-3d;
+  filter: none;
+  mix-blend-mode: normal;
 }
 
 .gameStats {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
   align-items: center;
   font-size: 1.1rem;
   font-weight: bold;
@@ -2593,6 +2598,36 @@
   pointer-events: none;
   backface-visibility: hidden;
   perspective: 1000px;
+  /* Force stable rendering */
+  transform-style: preserve-3d;
+  filter: none;
+  mix-blend-mode: normal;
+}
+
+.gameStats span {
+  display: inline-block;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  filter: none;
+  mix-blend-mode: normal;
+}
+
+.gameStatItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  filter: none;
+  mix-blend-mode: normal;
+  isolation: isolate;
+  contain: layout style paint;
 }
 
 .gameStats {

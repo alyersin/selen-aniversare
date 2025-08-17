@@ -789,13 +789,19 @@ function BalloonGameContent() {
       {/* Game Header */}
       <div className={styles.gameHeader}>
         <div className={styles.gameStats}>
-          <span>⏱️ Timp: {formatTime(time)}</span>
-          <span>
-            💥 Sparte: {poppedCount}/{totalBalloons}
-          </span>
-          <span>👤 {playerName}</span>
+          <div className={styles.gameStatItem}>
+            <span>⏱️ Timp: {formatTime(time)}</span>
+          </div>
+          <div className={styles.gameStatItem}>
+            <span>💥 Sparte: {poppedCount}/{totalBalloons}</span>
+          </div>
+          <div className={styles.gameStatItem}>
+            <span>👤 {playerName}</span>
+          </div>
           {isInsanityMode && (
-            <span className={styles.insanityBadge}>🔥 INSANITY</span>
+            <div className={styles.gameStatItem}>
+              <span className={styles.insanityBadge}>🔥 INSANITY</span>
+            </div>
           )}
         </div>
       </div>
