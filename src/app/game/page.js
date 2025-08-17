@@ -727,7 +727,7 @@ function BalloonGameContent() {
         <div className={styles.gameStartContent}>
           <h1>🎈 Jocul baloanelor</h1>
           <p>
-            Bună, <strong>{playerName}</strong>! 👋
+            Bună, <strong>{playerName}</strong>!
           </p>
 
           {showInsanityOption && (
@@ -741,7 +741,7 @@ function BalloonGameContent() {
 
           <div className={styles.gameModes}>
             <div className={styles.normalMode}>
-              <h3>📋 Mod Normal:</h3>
+              <h3>Mod Normal:</h3>
               <ul>
                 <li>💥 Sparge toate cele {totalBalloons} baloane</li>
                 <li>⏱️ Timpul se măsoară automat</li>
@@ -786,14 +786,16 @@ function BalloonGameContent() {
 
   return (
     <div className={styles.gamePageContainer}>
-      {/* Game Header */}
-      <div className={styles.gameHeader}>
+      {/* Game Header - Completely separate */}
+      <header className={styles.gameHeaderFixed}>
         <div className={styles.gameStats}>
           <div className={styles.gameStatItem}>
             <span>⏱️ Timp: {formatTime(time)}</span>
           </div>
           <div className={styles.gameStatItem}>
-            <span>💥 Sparte: {poppedCount}/{totalBalloons}</span>
+            <span>
+              💥 Sparte: {poppedCount}/{totalBalloons}
+            </span>
           </div>
           <div className={styles.gameStatItem}>
             <span>👤 {playerName}</span>
@@ -804,26 +806,28 @@ function BalloonGameContent() {
             </div>
           )}
         </div>
-      </div>
+      </header>
 
-      {/* Game Area */}
-      <div className={styles.gameArea}>
-        {balloons.map((balloon) => (
-          <div
-            key={balloon.id}
-            className={`${styles.gameBalloon} ${
-              balloon.popped ? styles.popped : ""
-            }`}
-            style={{
-              left: balloon.x,
-              top: balloon.y,
-            }}
-            onClick={() => !balloon.popped && popBalloon(balloon.id)}
-          >
-            {balloon.popped ? "💥" : balloon.color}
-          </div>
-        ))}
-      </div>
+      {/* Game Main - Completely separate */}
+      <main className={styles.gameMainContainer}>
+        <div className={styles.gameArea}>
+          {balloons.map((balloon) => (
+            <div
+              key={balloon.id}
+              className={`${styles.gameBalloon} ${
+                balloon.popped ? styles.popped : ""
+              }`}
+              style={{
+                left: balloon.x,
+                top: balloon.y,
+              }}
+              onClick={() => !balloon.popped && popBalloon(balloon.id)}
+            >
+              {balloon.popped ? "💥" : balloon.color}
+            </div>
+          ))}
+        </div>
+      </main>
 
       {/* Game Finished Modal */}
       {gameFinished && (
